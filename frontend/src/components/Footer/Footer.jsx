@@ -3,17 +3,19 @@ import { Link } from 'react-router-dom'
 
 export default function Footer() {
     return (
-        <footer className="bg-white border-y">
+        <footer className="bg-gray-200 border-y">
             <div className="mx-auto w-full max-w-screen-xl p-4 py-6 lg:py-8">
                 <div className="md:flex md:justify-between">
                     <div className="mb-6 md:mb-0">
-                        <Link to="/" className="flex items-center">
-                            <img
-                                src="https://alexharkness.com/wp-content/uploads/2020/06/logo-2.png"
-                                className="mr-3 h-16"
-                                alt="Logo"
-                            />
-                        </Link>
+                    <Link to="/" className="flex items-center">
+                        <img
+                            // src="https://alexharkness.com/wp-content/uploads/2020/06/logo-2.png"
+                            src='https://cdn.pixabay.com/photo/2022/03/21/07/02/fire-7082466_1280.png'
+                            className="mr-3 h-12"
+                            alt="Logo"
+                        />
+                        <span className="font-dancing-script self-center text-4xl whitespace-nowrap">Stay Determined!</span>
+                    </Link>
                     </div>
                     <div className="grid grid-cols-2 gap-8 sm:gap-6 sm:grid-cols-3">
                         <div>
@@ -36,7 +38,7 @@ export default function Footer() {
                             <ul className="text-gray-500 font-medium">
                                 <li className="mb-4">
                                     <a
-                                        href="https://github.com/hiteshchoudhary"
+                                        href="#"
                                         className="hover:underline"
                                         target="_blank"
                                         rel="noreferrer"
@@ -69,11 +71,11 @@ export default function Footer() {
                     </div>
                 </div>
                 <hr className="my-6 border-gray-200 sm:mx-auto lg:my-8" />
-                <div className="sm:flex sm:items-center sm:justify-between">
+                <div className="bg-white w-full p-4 h-10 sm:flex sm:items-center sm:justify-between">
                     <span className="text-sm text-gray-500 sm:text-center">
-                        © 2023
+                        © 2024
                         <a href="https://hiteshchoudhary.com/" className="hover:underline">
-                            hiteshchoudhary
+                            staydetermined.com
                         </a>
                         . All Rights Reserved.
                     </span>
