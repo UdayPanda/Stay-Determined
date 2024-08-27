@@ -3,6 +3,7 @@ import cors from "cors";
 import dotenv from "dotenv";
 import mongoose from "mongoose";
 import authRoute from "./routes/AuthRoute.js";
+import todoRoute from "./routes/TodoRoute.js";
 
 
 dotenv.config()
@@ -20,6 +21,7 @@ app.use(cors({
 }))
 
 app.use('/api/auth', authRoute)
+app.use('/api/todos', todoRoute)
 
 
 app.listen(port, ()=>{

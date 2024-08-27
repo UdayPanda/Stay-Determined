@@ -1,7 +1,17 @@
 import React from 'react'
 import { Link, NavLink } from 'react-router-dom'
+import { useAuth } from '../../contexts';
+import BurgerMenu from './BurgerMenu';
 
-export default function Header() {
+export default function Navbar() {
+
+    const { user } = useAuth()
+
+    const logoutUser = () => {
+        localStorage.removeItem('token');
+        window.location.reload();
+    };
+
     return (
         <header className="font-poppins shadow sticky z-50 top-0">
             <nav className="bg-gray-200 border-gray-200 px-4 lg:px-6 py-2.5">
@@ -9,24 +19,25 @@ export default function Header() {
                     <Link to="/" className="flex items-center">
                         <img
                             src='https://cdn.pixabay.com/photo/2022/03/21/07/02/fire-7082466_1280.png'
-                            className="mr-3 h-12"
+                            className="mr-3 h-8"
                             alt="Logo"
                         />
-                        <span className="font-dancing-script self-center text-4xl whitespace-nowrap">Stay Determined!</span>
+                        <span className="font-dancing-script self-center text-2xl whitespace-nowrap">Stay Determined!</span>
                     </Link>
                     <div className="flex items-center lg:order-2">
                         <Link
-                            to="/login"
+                            to="/profile"
                             className="text-gray-800 hover:bg-gray-50 focus:ring-4 focus:ring-gray-300 font-medium rounded-lg text-sm px-4 lg:px-5 py-2 lg:py-2.5 mr-2 focus:outline-none"
                         >
-                            Log in
+                            {user && user.name ? user.name : 'Profile'}
+
                         </Link>
-                        <Link
-                            to="/signup"
+                        <button
+                            onClick={logoutUser}
                             className="text-white bg-orange-700 hover:bg-orange-800 focus:ring-4 focus:ring-orange-300 font-medium rounded-lg text-sm px-4 lg:px-5 py-2 lg:py-2.5 mr-2 focus:outline-none"
                         >
-                            Get started
-                        </Link>
+                            Logout
+                        </button>
                     </div>
                     <div
                         className="hidden justify-between items-center w-full lg:flex lg:w-auto lg:order-1"
@@ -59,6 +70,9 @@ export default function Header() {
                     </div>
                 </div>
             </nav>
+            <div className='absolute left-32 top-24'>
+            <BurgerMenu />
+            </div>
         </header>
     );
 }

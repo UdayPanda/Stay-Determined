@@ -6,7 +6,7 @@ const PrivateRoute = ({ element }) => {
     const { user } = useAuth()
     const location = useLocation()
 
-    if(!user) {
+    if(!user && localStorage.getItem('token')) {
         return <Navigate to='/login' state={{ form : location }} replace />
     }
 

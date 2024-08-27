@@ -47,6 +47,7 @@ function Login() {
             try {
 
                 const response = await apiClient.post(LOGIN_ROUTE, {phone,email, password})
+                localStorage.setItem("token", response.data.token)
                 showToast("Logged in successfully", 'success')
 
                 login(response.data)

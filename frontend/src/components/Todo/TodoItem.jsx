@@ -7,15 +7,15 @@ function TodoItem({ todo }) {
 
     const [isTodoEditable, setIsTodoEditable] = useState(false)
 
-    const [todoMsg, setTodoMsg] = useState(todo.todo)
+    const [todoMsg, setTodoMsg] = useState(todo.title)
 
     const editTodo = () => {
-        updateTodo(todo.id, {...todo, todo: todoMsg})
+        updateTodo(todo._id, {...todo, title: todoMsg})
         setIsTodoEditable(false)
     }
 
     const toggleCompleted = ()=> {
-        toggleComplete(todo.id)
+        toggleComplete(todo._id)
     }
 
     return (
@@ -56,7 +56,7 @@ function TodoItem({ todo }) {
             {/* Delete Todo Button */}
             <button
                 className="inline-flex w-8 h-8 rounded-lg text-sm border border-black/10 justify-center items-center bg-gray-50 hover:bg-gray-100 shrink-0"
-                onClick={() => removeTodo && removeTodo(todo.id)}
+                onClick={() => removeTodo && removeTodo(todo._id)}
             >
                 ❌
             </button>
