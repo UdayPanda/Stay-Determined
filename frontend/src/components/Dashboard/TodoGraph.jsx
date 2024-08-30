@@ -55,50 +55,43 @@ function TodoGraph() {
     }
 
     useEffect(() => {
-        const userID = user?.user?.id
+        const userID = user?.user?.id || user?.id
 
         if (userID) {
             fetchTodos(userID, date);
         }
-        if (user.id) {
-            fetchTodos(user.id, date);
-        }
 
-        if (!userID && !user.id) {
+        if (userID == undefined) {
             showToast("Please login again!", 'error')
         }
 
     }, [user, date]);
 
     useEffect(() => {
-
         const timer = setTimeout(() => {
-            if (todos.filter((todo) => todo.date === date).length === 0) showToast("Please add todos.....", 'info');
+            if (!todos.some((todo) => {
+                const todoDate = new Date(todo.date).toISOString().split('T')[0]; 
+                return todoDate === date;
+            })) {
+                showToast("Please add todos.....", 'info');
+            }
+            
         }, 1000);
 
-        const counts = { ubni: 0, ibnu: 0, unb: 0, other: 0 };
-        todos.forEach((todo) => {
+        const counts = todos.reduce((acc, todo) => {
             switch (todo.label) {
-                case 1:
-                    counts.ubni++;
-                    break;
-                case 2:
-                    counts.ibnu++;
-                    break;
-                case 3:
-                    counts.unb++;
-                    break;
-                case 4:
-                    counts.other++;
-                    break;
-                default:
-                    break;
+                case 1: acc.ubni++; break;
+                case 2: acc.ibnu++; break;
+                case 3: acc.unb++; break;
+                case 4: acc.other++; break;
+                default: break;
             }
-        });
+            return acc;
+        }, { ubni: 0, ibnu: 0, unb: 0, other: 0 });
+
         setChartData(counts);
 
         return () => clearTimeout(timer);
-
     }, [todos]);
 
 
@@ -159,8 +152,7 @@ function TodoGraph() {
             setChartKey(prevKey => prevKey + 1);
         }, 5000);
         return () => clearInterval(interval);
-    }, []);
-
+    }, [chartData]);
 
 
     return (

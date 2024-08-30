@@ -102,16 +102,13 @@ function AllTodos({ label }) {
 
     useEffect(() => {
 
-        const userID = user?.user?.id
-      
+        const userID = user?.user?.id || user?.id
+
         if (userID) {
             fetchTodos(userID, date);
         }
-        if (user.id) {
-            fetchTodos(user.id, date);
-        }
 
-        if(!userID && !user.id) {
+        if (userID == undefined) {
             showToast("Please login again!", 'error')
         }
 
@@ -119,7 +116,13 @@ function AllTodos({ label }) {
 
     useEffect(() => {
         const timer = setTimeout(() => {
-            if (todos.filter((todo)=> todo.date === date).length === 0) showToast("Please add todos.....", 'info');
+            if (!todos.some((todo) => {
+                const todoDate = new Date(todo.date).toISOString().split('T')[0]; 
+                return todoDate === date;
+            })) {
+                showToast("Please add todos.....", 'info');
+            }
+            
         }, 1000);
         return () => clearTimeout(timer);
 

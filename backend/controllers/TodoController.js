@@ -44,6 +44,7 @@ export const getTodos = async (req, res, next) => {
     try {
 
         const { user, date } = req.body;
+        
         if (!user && !date) {
             return res.status(400).json({
                 success: false,
