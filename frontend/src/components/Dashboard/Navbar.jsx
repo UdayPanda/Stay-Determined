@@ -1,7 +1,6 @@
 import React from 'react'
 import { Link, NavLink } from 'react-router-dom'
 import { useAuth } from '../../contexts';
-import BurgerMenu from './BurgerMenu';
 
 export default function Navbar() {
 
@@ -29,7 +28,7 @@ export default function Navbar() {
                             to="/profile"
                             className="text-gray-800 hover:bg-gray-50 focus:ring-4 focus:ring-gray-300 font-medium rounded-lg text-sm px-4 lg:px-5 py-2 lg:py-2.5 mr-2 focus:outline-none"
                         >
-                            {user && user.name ? user.name : 'Profile'}
+                            {user ? user.name : 'Profile'}
 
                         </Link>
                         <button
@@ -70,9 +69,7 @@ export default function Navbar() {
                     </div>
                 </div>
             </nav>
-            <div className='absolute left-32 top-24'>
-            <BurgerMenu />
-            </div>
+            
         </header>
     );
 }

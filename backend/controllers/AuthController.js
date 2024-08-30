@@ -4,8 +4,8 @@ import jwt from "jsonwebtoken";
 
 const age = 3 * 24 * 60 * 60 * 1000;
 
-const createToken = (phone, id) => {
-    return jwt.sign({ phone, id }, process.env.JWT_KEY, { expiresIn: age })
+const createToken = (phone, id, name) => {
+    return jwt.sign({ phone, id, name }, process.env.JWT_KEY, { expiresIn: age })
 }
 
 export const signup = async (req, res, next) => {
@@ -79,7 +79,9 @@ export const login = async (req, res, next) => {
             })
         }
 
-        res.cookie("jwt", createToken(phone, user._id), {
+        const token = createToken(phone, user._id, user.name);
+
+        res.cookie("jwt", token, {
             maxAge: age,
             secure: true,
             sameSite: 'None',
@@ -89,6 +91,7 @@ export const login = async (req, res, next) => {
         return res.status(200).json({
             success: true,
             message: "Login successfull",
+            token,
             user: {
                 id: user.id,
                 phone: user.phone,
