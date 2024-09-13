@@ -34,7 +34,7 @@ function AllTodos({ label }) {
 
     const todosFilterByLabelProvidedInProp = (fetchedTodos) => {
 
-        if (fetchTodos && Array.isArray(fetchedTodos)) {
+        if (fetchedTodos && Array.isArray(fetchedTodos)) {
             fetchedTodos = fetchedTodos.filter((todo) => todo.label === Number(todoLabel));
             setTodos(fetchedTodos)
         }

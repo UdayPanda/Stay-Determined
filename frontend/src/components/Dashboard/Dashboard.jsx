@@ -4,6 +4,7 @@ import Home from './TodoGraph';
 import AllTodos from './AllTodos';
 import AddTodo from './AddTodo';
 import '../../App.css'
+import VitaminM from './VitaminM';
 
 
 function Dashboard() {
@@ -22,6 +23,8 @@ function Dashboard() {
                 return <AllTodos />;
             case 'addTodo':
                 return <AddTodo />;
+            case 'vitaminm':
+                return <VitaminM />;
             default:
                 return <Home />;
         }
@@ -42,6 +45,7 @@ function Dashboard() {
                             <li className='cursor-pointer p-2 rounded-md hover:bg-slate-300' onClick={() => setStateDisplay('dashboard')}>Dashboard</li>
                             <li className='cursor-pointer p-2 rounded-md hover:bg-slate-300' onClick={() => setStateDisplay('allTodos')}>All Todos</li>
                             <li className='cursor-pointer p-2 rounded-md hover:bg-slate-300' onClick={() => setStateDisplay('addTodo')}>Add Todo</li>
+                            <li className='cursor-pointer p-2 rounded-md hover:bg-slate-300' onClick={() => setStateDisplay('vitaminm')}>VitaminM</li>
                         </ul>
                     </nav>
                 </div>

@@ -13,6 +13,15 @@ export const addExpanse = async (req, res) => {
             })
         }
 
+        const notUniqueTransaction = await Expanse.findOne({ user, date, party });
+        
+        if(notUniqueTransaction != null){
+            return res.status(400).json({
+                success: false,
+                message: "Transaction already exists!"
+            })
+        }
+
         const lastExpanse = await Expanse.findOne({ user }).sort({ date: -1 });
 
         const previousBalance = lastExpanse ? lastExpanse.balance : 0;
@@ -75,6 +84,36 @@ export const getExpanse = async (req, res) => {
             success: true,
             message: "Expanse fetched successfully",
             expanse
+        })
+
+    } catch (error) {
+        console.log(error);
+        return res.status(500).json({
+            success: false,
+            message: 'Internal server error'
+        })
+    }
+}
+
+export const getBalance = async (req, res) => {
+    try {
+        
+        const { user } = req.body
+
+        if (!user) {
+            return res.status(400).json({
+                success: false,
+                message: "Please provide user"
+            })
+        }
+
+        const expanse = await Expanse.findOne({ user }).sort({ date: -1 })
+        const balance = expanse ? expanse.balance : 0
+
+        res.status(200).json({
+            success: true,
+            message: "Expanse fetched successfully",
+            balance: balance
         })
 
     } catch (error) {

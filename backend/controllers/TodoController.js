@@ -4,7 +4,7 @@ import Todo from '../models/TodoModel.js'
 export const addTodo = async (req, res, next) => {
     try {
 
-        let { title, user, completed, date, label, scheduledFor, reminder, reminderTime } = req.body;
+        let { title, user, completed, date, label, scheduledFor, reminder, reminderTime, expanse } = req.body;
         if (!title || !user) {
             return res.status(400).json({
                 success: false,
@@ -14,7 +14,7 @@ export const addTodo = async (req, res, next) => {
 
         label = label !== 'null' ? label : 1
         
-        const todo = await Todo.create({ title, user, completed, date, label, scheduledFor, reminder, reminderTime })
+        const todo = await Todo.create({ title, user, completed, date, label, scheduledFor, reminder, reminderTime, expanse })
 
         return res.status(201).json({
             success: true,
@@ -27,7 +27,8 @@ export const addTodo = async (req, res, next) => {
                 reminder: todo.reminder,
                 reminderTime: todo.reminderTime,
                 completed: todo.completed,
-                scheduledFor: todo.scheduledFor
+                scheduledFor: todo.scheduledFor,
+                expanse: todo.expanse
             }
         })
 

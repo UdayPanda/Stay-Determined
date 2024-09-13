@@ -15,6 +15,7 @@ function TodoForm() {
 
     const { addTodo } = useTodo()
     const { user } = useAuth()
+    const userID = user?.user?.id || user?.id
 
     const showToast = (message, type) => {
         setToast({ show: true, message, type });
@@ -30,7 +31,7 @@ function TodoForm() {
         if (user) {
             addTodo({
                 title: todo,
-                user: user.user.id,
+                user: userID,
                 completed: isCompleted,
                 date: date,
                 label: label,

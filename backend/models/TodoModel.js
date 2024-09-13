@@ -37,6 +37,10 @@ const todoSchema = new mongoose.Schema({
                 message: `You entered invalid label. It must be 1, 2, 3 or 4.`
         },
         default: 1,
+    },
+    expanse: {
+        type: Boolean,
+        default: false
     }
 })
 

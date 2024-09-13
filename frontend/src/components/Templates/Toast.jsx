@@ -17,21 +17,21 @@ function Toast({show = false, message, type = 'info', duration = 10000}) {
 
     if (!visible) return null
 
-    const baseStyles = "absolute top-20 left-20 z-50 flex items-center justify-evenly p-2 rounded-lg text-center";
+    const baseStyles = "absolute top-20 left-48 z-50 flex items-center justify-evenly p-2 rounded-lg text-center";
     
     let toastStyles = '';
     switch (type) {
         case 'success':
-            toastStyles = 'bg-green-100 text-green-800';
+            toastStyles = 'bg-green-300 text-green-800';
             break;
         case 'warning':
-            toastStyles = 'bg-yellow-100 text-yellow-800';
+            toastStyles = 'bg-yellow-300 text-yellow-800';
             break;
         case 'error':
-            toastStyles = 'bg-red-100 text-red-800';
+            toastStyles = 'bg-red-300 text-red-800';
             break;
         default:
-            toastStyles = 'bg-blue-100 text-blue-800';
+            toastStyles = 'bg-blue-300 text-blue-800';
             break;
     }
 

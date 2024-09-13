@@ -38,6 +38,12 @@ const expanseSchema = new mongoose.Schema({
     todoID: {
         type: mongoose.Schema.Types.ObjectId,
         ref: "Todo",
+        validate: {
+            validator: function(v) {
+                return v == null || mongoose.Types.ObjectId.isValid(v);
+            },
+            message: 'Invalid todoID'
+        }
     },
     category: {
         type: String,

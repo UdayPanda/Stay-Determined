@@ -34,7 +34,7 @@ function TodoItem({ todo }) {
 
     return (
         <div
-            className={`flex justify-between h-20 border border-black/10 rounded-lg px-3 py-1.5 gap-x-3 shadow-sm shadow-white/50 duration-300  text-black ${todo.completed ? "bg-[#c6e9a7]" : "bg-[#E1D7B7]"}
+            className={`flex justify-between h-20 border border-black/10 rounded-lg px-3 py-1.5 gap-x-3 shadow-sm shadow-white/50 duration-300  text-black ${todo.completed ? "bg-[#c6e9a7]" : "bg-[#e1d7b7]"}
                 }`}
         >
             <input
