@@ -59,7 +59,7 @@ function Login() {
 
             } catch (error) {
 
-                let errorMessage = "An error occurred during account creation";
+                let errorMessage = "An error occurred during account login.";
                 if (error.response) {
                     errorMessage = error.response.data.message || error.response.data.error || errorMessage;
                 }
