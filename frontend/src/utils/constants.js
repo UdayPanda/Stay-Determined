@@ -1,4 +1,4 @@
-export const HOST = "http://localhost:4321";
+export const HOST = "https://stay-determined-backend.onrender.com";
 
 export const AUTH_ROUTE  = "api/auth";
 export const SIGNUP_ROUTE = `${AUTH_ROUTE}/signup`;
