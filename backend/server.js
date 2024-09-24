@@ -11,12 +11,13 @@ dotenv.config()
 
 const app = express()
 const port = process.env.PORT || 4000
+const origin = process.env.ORIGIN
 const db = process.env.DB_URL
 
 app.use(express.json())
 
 app.use(cors({
-    origin: process.env.ORIGIN,
+    origin: origin,
     methods: ['GET', 'POST', 'PUT', 'DELETE'],
     credentials: true,  
 }))
@@ -26,7 +27,7 @@ app.use('/api/todos', todoRoute)
 app.use('/api/expanse', expanseRoute)
 
 app.listen(port, ()=>{
-    console.log(`Server is running on http://localhost:${port}`)
+    console.log(`Server is running on origin: ${origin} and port: ${port}`)
 })
 
 mongoose
