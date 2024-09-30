@@ -17,10 +17,16 @@ const db = process.env.DB_URL
 app.use(express.json())
 
 app.use(cors({
-    origin: origin,
+    origin: 'https://stay-determined-frontend.onrender.com', 
     methods: ['GET', 'POST', 'PUT', 'DELETE'],
     credentials: true,  
-}))
+}));
+
+app.options('*', cors({
+    origin: 'https://stay-determined-frontend.onrender.com', 
+    methods: ['GET', 'POST', 'PUT', 'DELETE'],
+    credentials: true,
+}));
 
 app.use('/api/auth', authRoute)
 app.use('/api/todos', todoRoute)
