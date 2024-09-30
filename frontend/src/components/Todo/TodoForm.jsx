@@ -57,7 +57,7 @@ function TodoForm() {
 
                     <input
                         type="date"
-                        className='absolute top-4 right-4 bg-white text-gray-600 w-32 rounded-md p-1'
+                        className='absolute top-4 right-4 text-sm lg:text-md bg-white text-gray-600 w-32 rounded-md p-1'
                         value={date}
                         onChange={(e) => setDate(e.target.value)}
                     />
@@ -65,7 +65,7 @@ function TodoForm() {
                     <input
                         type="text"
                         placeholder="Write Todo..."
-                        className="w-full mt-12 ml-28 border border-black/10 rounded-md px-3 outline-none duration-150 bg-white py-1.5"
+                        className="w-full mt-12 ml-0 lg:ml-5 border border-black/10 rounded-md px-3 outline-none duration-150 bg-white py-1.5"
                         value={todo}
                         onChange={(e) => setTodo(e.target.value)}
                     />
@@ -79,34 +79,34 @@ function TodoForm() {
                     />
 
                     <label
-                        className="ml-28 font-semibold text-xl"
+                        className="ml-0 lg:ml-20 font-semibold text-xl"
                     >
                         Label:
                     </label>
 
-                    <div className='grid grid-cols-2 gap-3 ml-16 items-center justify-center m-auto w-full'>
+                    <div className='grid grid-cols-2 gap-3 ml-0 lg:ml-2 items-center justify-center m-auto w-full text-sm lg:text-xl'>
                         <div>
                             <input type='radio' name='label' value='1' checked={label === '1'} onChange={(e) => setLabel(e.target.value)} />
-                            <label htmlFor="1" className='ml-2'>Urgent but not important</label>
+                            <label htmlFor="1" className='ml-2 text-[#32A3F5] font-bold'>Urgent but not important</label>
                         </div>
 
                         <div>
                             <input type='radio' name='label' value='2' checked={label === '2'} onChange={(e) => setLabel(e.target.value)} />
-                            <label htmlFor="2" className='ml-2'>Important but not urgent</label>
+                            <label htmlFor="2" className='ml-2 text-[#f52987] font-bold'>Important but not urgent</label>
                         </div>
 
                         <div>
                             <input type='radio' name='label' value='3' checked={label === '3'} onChange={(e) => setLabel(e.target.value)} />
-                            <label htmlFor="3" className='ml-2'>Urgent and important</label>
+                            <label htmlFor="3" className='ml-2 text-[#32C64A] font-bold'>Urgent and important</label>
                         </div>
 
                         <div>
                             <input type='radio' name='label' value='4' checked={label === '4'} onChange={(e) => setLabel(e.target.value)} />
-                            <label htmlFor="4" className='ml-2'>Other</label>
+                            <label htmlFor="4" className='ml-2 text-[#F5BC20] font-bold'>Other</label>
                         </div>
                     </div>
 
-                    <button type="submit" className="mt-8 ml-28 rounded-md px-3 py-1 bg-green-600 text-white">
+                    <button type="submit" className="mt-8 ml-0 lg:ml-20 rounded-md px-2 lg:px-3 py-0 lg:py-1 bg-green-600 text-sm lg:text-xl text-white">
                         Add
                     </button>
                 </div>
