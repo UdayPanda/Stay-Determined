@@ -33,7 +33,7 @@ function Dashboard() {
     return (
         <>
             <Navbar />
-            <div className='absolute left-32 top-24'>
+            <div className='absolute left-5 lg:left-32 top-16 lg:top-24'>
                 <div>
                     <div className="burger-icon" onClick={toggleMenu}>
                         <div className={`line ${isOpen ? 'open' : ''}`}></div>
