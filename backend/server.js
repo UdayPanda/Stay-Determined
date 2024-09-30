@@ -20,7 +20,6 @@ app.use(cors({
     origin: origin,
     methods: ['GET', 'POST', 'PUT', 'DELETE'],
     credentials: true,  
-    app.options('*', cors(corsOptions)); 
 }))
 
 app.use('/api/auth', authRoute)
