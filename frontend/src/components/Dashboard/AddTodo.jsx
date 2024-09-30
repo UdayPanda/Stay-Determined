@@ -36,7 +36,7 @@ function AddTodo() {
         <>
             <TodoProvider value={{ todos, addTodo }}>
                 <h1 className="text-2xl text-white font-bold text-center m-10 mt-2">Add Task Todo</h1>
-                <div className="w-[50%] mx-auto bg-blue-300 p-4 rounded-md relative mb-4">
+                <div className="w-[80%] lg:w-[50%] mx-auto bg-blue-300 p-4 rounded-md relative mb-4">
 
                     <TodoForm />
                 </div>
