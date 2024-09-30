@@ -14,8 +14,6 @@ const port = process.env.PORT || 4000
 const origin = process.env.ORIGIN
 const db = process.env.DB_URL
 
-app.use(express.json())
-
 app.use(cors({
     origin: 'https://stay-determined-frontend.onrender.com', 
     methods: ['GET', 'POST', 'PUT', 'DELETE'],
@@ -27,6 +25,8 @@ app.options('*', cors({
     methods: ['GET', 'POST', 'PUT', 'DELETE'],
     credentials: true,
 }));
+
+app.use(express.json())
 
 app.use('/api/auth', authRoute)
 app.use('/api/todos', todoRoute)
