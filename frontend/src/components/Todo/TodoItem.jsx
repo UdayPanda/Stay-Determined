@@ -34,7 +34,7 @@ function TodoItem({ todo }) {
 
     return (
         <div
-            className={`flex justify-between h-20 border border-black/10 rounded-lg px-3 py-1.5 gap-x-3 shadow-sm shadow-white/50 duration-300  text-black ${todo.completed ? "bg-[#c6e9a7]" : "bg-[#e1d7b7]"}
+            className={`flex justify-between h-20 border border-black/10 rounded-lg px-3 py-1.5 gap-x-1 lg:gap-x-3 shadow-sm shadow-white/50 duration-300  text-black ${todo.completed ? "bg-[#c6e9a7]" : "bg-[#e1d7b7]"}
                 }`}
         >
             <input
@@ -46,19 +46,19 @@ function TodoItem({ todo }) {
             <div className='relative w-[80%]'>
                 <input
                     type="text"
-                    className={`border mt-2 text-gray-700 text-xl outline-none w-full bg-transparent rounded-lg ${isTodoEditable ? "border-black/10 px-2" : "border-transparent"
+                    className={`border mt-5 lg:mt-2 text-gray-700 text-sm lg:text-xl outline-none w-full bg-transparent rounded-lg ${isTodoEditable ? "border-black/10 px-2" : "border-transparent"
                         } ${todo.completed ? "line-through" : ""}`}
                     value={todoMsg}
                     onChange={(e) => setTodoMsg(e.target.value)}
                     readOnly={!isTodoEditable}
                 />
 
-                <p className={`absolute left-1 font-bold ${labelColor[todo.label]} top-11 -translate-y-1/2 text-sm`} >{labelInfo[todo.label]}</p>
+                <p className={`absolute left-1 w-[250px] font-bold ${labelColor[todo.label]} top-14 lg:top-11 -translate-y-1/2 text-[9px] lg:text-sm`} >{labelInfo[todo.label]}</p>
             </div>
 
             {/* Edit, Save Button */}
             <button
-                className="inline-flex h-7 mt-5 px-2 text-blue-500 rounded-lg text-sm border border-black/10 justify-center items-center bg-gray-50 hover:bg-gray-100 shrink-0 disabled:opacity-50"
+                className="inline-flex h-5 lg:h-7 mt-5 px-1 lg:px-2 text-blue-500 rounded-lg text-xs lg:text-sm border border-black/10 justify-center items-center bg-gray-50 hover:bg-gray-100 shrink-0 disabled:opacity-50"
                 onClick={() => {
                     if (todo.completed) return;
 
@@ -72,7 +72,7 @@ function TodoItem({ todo }) {
             </button>
             {/* Delete Todo Button */}
             <button
-                className="inline-flex h-7 mt-5 px-2 text-red-500 rounded-lg text-sm border border-black/10 justify-center items-center bg-gray-50 hover:bg-gray-100 shrink-0"
+                className="inline-flex h-5 lg:h-7 mt-5 px-1 lg:px-2 text-red-500 rounded-lg text-xs lg:text-sm border border-black/10 justify-center items-center bg-gray-50 hover:bg-gray-100 shrink-0"
                 onClick={() => removeTodo && removeTodo(todo._id)}
             >
                 Delete
