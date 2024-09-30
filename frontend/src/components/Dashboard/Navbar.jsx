@@ -19,22 +19,22 @@ export default function Navbar() {
                     <Link to="/" className="flex items-center">
                         <img
                             src='https://cdn.pixabay.com/photo/2022/03/21/07/02/fire-7082466_1280.png'
-                            className="mr-3 h-8"
+                            className="h-5 md:h-8 lg:mr-3 lg:h-8"
                             alt="Logo"
                         />
-                        <span className="font-dancing-script self-center text-2xl whitespace-nowrap md:text-xl sm:text-lg">Stay Determined!</span>
+                        <span className="font-dancing-script self-center text-xl whitespace-nowrap lg:text-2xl sm:text-lg">Stay Determined!</span>
                     </Link>
                     <div className="flex items-center lg:order-2">
                         <Link
                             to="/profile"
-                            className="text-gray-800 hover:bg-gray-50 focus:ring-4 focus:ring-gray-300 font-medium rounded-lg text-sm px-4 lg:px-5 py-2 lg:py-2.5 mr-2 focus:outline-none"
+                            className="text-gray-800 hover:bg-gray-50 focus:ring-4 focus:ring-gray-300 font-medium rounded-lg text-xs lg:text-sm px-4 lg:px-5 py-2 lg:py-2.5 mr-2 focus:outline-none"
                         >
                             {userName ? userName : 'Profile'}
 
                         </Link>
                         <button
                             onClick={logoutUser}
-                            className="text-white bg-orange-700 hover:bg-orange-800 focus:ring-4 focus:ring-orange-300 font-medium rounded-lg text-sm px-4 lg:px-5 py-2 lg:py-2.5 mr-2 focus:outline-none"
+                            className="text-white bg-orange-700 hover:bg-orange-800 focus:ring-4 focus:ring-orange-300 font-medium rounded-lg text-xs lg:text-sm px-2 lg:px-5 py-1 lg:py-2.5 mr-2 focus:outline-none"
                         >
                             Logout
                         </button>
