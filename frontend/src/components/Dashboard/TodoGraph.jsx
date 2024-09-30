@@ -158,24 +158,24 @@ function TodoGraph() {
     return (
         <>
 
-            <h2 className='font-dancing-script absolute top-20 right-48 text-white text-2xl animate-fadeInSlide'>{days[day]}</h2>
+            <h2 className='font-dancing-script absolute top-16 lg:top-20 right-44 lg:right-48 text-xl md:text-xl lg:text-2xl text-white animate-fadeInSlide'>{days[day]}</h2>
 
             <input
                 type="date"
-                className='absolute outline-none top-20 right-10 bg-white text-gray-600 w-32 rounded-md p-1'
+                className='absolute outline-none top-16 lg:top-20 right-6 lg:right-10 text-sm lg:text-md bg-white text-gray-600 w-32 rounded-md p-1'
                 value={date}
                 onChange={(e) => setDate(e.target.value)}
             />
 
-            <h1 className="text-2xl text-white font-bold text-center m-5 mt-2">Manage Your Todos</h1>
+            <h1 className="text-2xl text-white font-bold text-center m-5 mt-10 lg:mt-2">Manage Your Todos</h1>
 
             <div className='relative'>
 
-                <div style={{ width: '40%', marginLeft: '30%', color: 'white' }}>
+                <div className='w-[75%] lg:w-[40%] text-white ml-[15%] lg:ml-[30%]'>
                     <PolarArea data={data} key={chartKey} options={options} />
                 </div>
 
-                <div className='absolute top-80 right-20'>
+                <div className='absolute top-70 lg:top-80 right-20'>
 
                     <div className='text-white text-md font-bold m-2'>Upcoming Todos: {todos.length}</div>
 
