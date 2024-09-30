@@ -117,12 +117,12 @@ function AllTodos({ label }) {
     useEffect(() => {
         const timer = setTimeout(() => {
             if (!todos.some((todo) => {
-                const todoDate = new Date(todo.date).toISOString().split('T')[0]; 
+                const todoDate = new Date(todo.date).toISOString().split('T')[0];
                 return todoDate === date;
             })) {
                 showToast("Please add todos.....", 'info');
             }
-            
+
         }, 1000);
         return () => clearTimeout(timer);
 
@@ -132,16 +132,16 @@ function AllTodos({ label }) {
     return (
         <>
 
-            <h2 className='font-dancing-script absolute top-20 right-48 text-white text-2xl animate-fadeInSlide'>{days[day]}</h2>
+            <h2 className='font-dancing-script absolute top-16 lg:top-20 right-44 lg:right-48 text-xl md:text-xl lg:text-2xl text-white animate-fadeInSlide'>{days[day]}</h2>
 
             <input
                 type="date"
-                className='absolute outline-none top-20 right-10 bg-white text-gray-600 w-32 rounded-md p-1'
+                className='absolute outline-none top-16 lg:top-20 right-6 lg:right-10 text-sm lg:text-md bg-white text-gray-600 w-32 rounded-md p-1'
                 value={date}
                 onChange={(e) => setDate(e.target.value)}
             />
 
-            <select className='rounded-md w-[150px] text-sm outline-none px-1 absolute top-40 right-10' onChange={(e) => setTodoLabel(e.target.value)}>
+            <select className='rounded-md w-[80px] lg:w-[150px] text-sm outline-none px-1 absolute top-40 right-6 lg:right-10' onChange={(e) => setTodoLabel(e.target.value)}>
                 <option value="0">filter</option>
                 <option value="1">Urgent but not Important</option>
                 <option value="2">Important but not Urgent</option>
@@ -149,12 +149,12 @@ function AllTodos({ label }) {
                 <option value="4">Other</option>
             </select>
 
-            <h1 className="text-2xl text-white font-bold text-center mb-2 mt-2"> {label && label > 0 ? labelInfo[label] : 'All'} Task Todos</h1>
+            <h1 className="text-2xl text-white font-bold text-center m-5 mt-10 lg:mt-2"> {label && label > 0 ? labelInfo[label] : 'All'} Task Todos</h1>
 
-            <div className='text-gray-400 text-md mx-auto w-[60%]'>Total Todos {todos.length}/ Completed {countCompleted}</div>
+            <div className='text-gray-400 text-md mt-2 mx-auto w-[80%] lg:w-[60%]'>Total Todos {todos.length}/ Completed {countCompleted}</div>
 
             <TodoProvider value={{ todos, updateTodo, toggleComplete, removeTodo }}>
-                <div className="flex flex-wrap gap-y-3 w-[60%] mx-auto mt-8">
+                <div className="flex flex-wrap gap-y-3 w-[80%] lg:w-[60%] mx-auto mt-8">
                     {todos.map((todo) => (
                         <div className='w-full' key={todo._id}>
                             <TodoItem todo={todo} />
