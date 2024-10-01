@@ -5,6 +5,7 @@ import Home from './components/Home/Home.jsx'
 import About from './components/About/About.jsx'
 import './index.css'
 import { Route, RouterProvider, createBrowserRouter, createRoutesFromElements } from 'react-router-dom'
+import { Navigate } from "react-router-dom"
 import SignUp from './components/Auth/SignUp.jsx'
 import Login from './components/Auth/Login.jsx'
 import Dashboard from './components/Dashboard/Dashboard.jsx'
