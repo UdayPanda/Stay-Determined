@@ -74,7 +74,7 @@ function Login() {
     return (
         <>
             <div className='absolute text-gray-600 inset-0 bg-black bg-opacity-15 backdrop-blur-md flex items-center justify-center'>
-                <div className='w-1/3 bg-white border-orange-700 rounded-xl p-4 px-8'>
+                <div className='w-[80%] lg:w-1/3 bg-white border-orange-700 rounded-xl p-4 px-8'>
                     <h1 className='text-center text-3xl font-bold text-orange-700'>Login</h1>
                     <form onSubmit={handleLogin} className='flex flex-col gap-4'>
                         <div className='flex flex-col gap-1'>
