@@ -31,7 +31,7 @@ export default function Header() {
                             {user ? 'Profile' : 'Login'}
                         </Link>
                         <Link
-                            to={"/signup"}
+                            to={"user? "/" : /signup"}
                             onClick={logoutUser}
                             className="text-white bg-orange-700 hover:bg-orange-800 focus:ring-4 focus:ring-orange-300 font-medium rounded-lg text-sm px-2 lg:px-5 py-1 lg:py-2.5 mr-2 focus:outline-none"
                         >
