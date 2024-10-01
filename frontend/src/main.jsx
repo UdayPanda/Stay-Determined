@@ -15,11 +15,11 @@ const router = createBrowserRouter(
   createRoutesFromElements(
     <>
       <Route path="/" element={<App />}>
-        <Route index element={<Home />} />
+        <Route path="" element={<Home />} />
         <Route path="about" element={<About />} />
         <Route path="signup" element={<SignUp />} />
         <Route path="login" element={<Login />} />
-        <Route path="*" element={<Navigate to="/" replace />} />
+        <Route path="*" element={<Navigate to="" replace />} />
       </Route>
       <Route path='dashboard' element={<PrivateRoute element={<Dashboard />} />}/>
     </>
