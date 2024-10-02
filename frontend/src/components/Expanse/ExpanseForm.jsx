@@ -77,7 +77,7 @@ function ExpanseForm({ onError }) {
     }, [user, balance])
 
     return (
-        <div className='fixed w-[90%] ml-4 lg:ml-0 bottom-6 flex flex-col lg:flex-row items-center justify-between bg-slate-400 rounded-md p-4'>
+        <div className='fixed w-[90%] ml-4 lg:ml-0 bottom-6 flex flex-col lg:flex-row gap-2 items-center justify-between bg-slate-400 rounded-md p-4'>
             <div className='text-gray-700 font-semibold text-lg'>Balance : {balance}</div>
 
             <button
