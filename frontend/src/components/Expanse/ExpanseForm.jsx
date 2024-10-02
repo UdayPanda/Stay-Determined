@@ -16,6 +16,7 @@ function ExpanseForm({ onError }) {
     const [loan, setLoan] = useState(false)
     const [todo, setTodo] = useState('')
     const [date, setDate] = useState('')
+    const [check, setCheck] = useState(true)
 
     const fetchBalance = async (userID) => {
         try {
@@ -76,11 +77,15 @@ function ExpanseForm({ onError }) {
     }, [user, balance])
 
     return (
-        <div className='fixed w-[90%] ml-4 lg:ml-0 bottom-6 flex items-center justify-between bg-[#e5e7eb] rounded-md p-4'>
+        <div className='fixed w-[90%] ml-4 lg:ml-0 bottom-6 flex flex-col lg:flex-row items-center justify-between bg-[#e5e7eb] rounded-md p-4'>
             <div className='text-gray-700 font-semibold text-lg'>Balance : {balance}</div>
 
+            <button
+                className={`block lg:hidden bg-sky-500 px-3 rounded-md text-sm text-white`}
+                onClick={()=> setCheck((prev)=> !prev)}
+            >{check ? "Add New" : "Cancel"}</button>
 
-            <div className='grid justify-between w-[600px] gap-2 grid-cols-2 text-sm'>
+            <div className={`${check ? "hidden" : "block"} lg:block justify-between w-full lg:w-[600px] grid gap-2 grid-cols-1 lg:grid-cols-2 text-sm`}>
                 <div className='flex items-start justify-between'>
                     <label htmlFor="party">Party: </label>
                     <input
@@ -124,14 +129,14 @@ function ExpanseForm({ onError }) {
                     <label htmlFor="party">Loan: </label>
 
                     <label className="inline-flex items-center mb-5 cursor-pointer outline-none mr-52">
-                        <input 
-                        type="checkbox" value="" 
-                        className="sr-only peer"
-                        checked={loan}
-                        onChange={() => setLoan(!loan)}
+                        <input
+                            type="checkbox" value=""
+                            className="sr-only peer"
+                            checked={loan}
+                            onChange={() => setLoan(!loan)}
                         />
-                            <div 
-                            className="relative w-7 h-4 bg-gray-200 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-blue-300 dark:ring-blue-800 rounded-full peer dark:bg-gray-700 peer-checked:after:translate-x-full rtl:peer-checked:after:-translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:start-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-3 after:w-3 after:transition-all dark:border-gray-600 peer-checked:bg-blue-600"></div>                            
+                        <div
+                            className="relative w-7 h-4 bg-gray-200 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-blue-300 dark:ring-blue-800 rounded-full peer dark:bg-gray-700 peer-checked:after:translate-x-full rtl:peer-checked:after:-translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:start-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-3 after:w-3 after:transition-all dark:border-gray-600 peer-checked:bg-blue-600"></div>
                     </label>
 
                 </div>
@@ -155,7 +160,7 @@ function ExpanseForm({ onError }) {
             <div>
                 <button
                     type='submit'
-                    className='bg-green-500 px-3 rounded-md text-sm text-white'
+                    className={`${check ? "hidden" : "block"} lg:block bg-green-500 px-3 rounded-md text-sm text-white`}
                     onClick={handleSave}
                 >Save</button>
             </div>
