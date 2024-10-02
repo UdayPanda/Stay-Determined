@@ -47,7 +47,7 @@ function Tasks({ onError }) {
 
     return (
         <div className='flex bg-[#e5e7eb] rounded-md h-80'>
-            <div className='flex flex-col items-center gap-2 w-48 m-2 text-gray-700 overflow-y-scroll scrollbar-none'>
+            <div className='flex flex-col items-center gap-2 w-full m-2 text-gray-700 overflow-y-scroll scrollbar-none'>
                 <div className='font-semibold'>Tasks</div>
 
                 {tasks && tasks.filter((task) => task.expanse === true).map((item) => (
