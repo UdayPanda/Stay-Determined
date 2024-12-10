@@ -4,6 +4,7 @@ import { LOGIN_ROUTE } from '../../utils/constants'
 import Toast from '../Templates/Toast.jsx'
 import { useNavigate } from 'react-router-dom'
 import { useAuth } from '../../contexts/AuthContext.jsx'
+import Loader from '../Templates/Loader.jsx'
 
 
 function Login() {
@@ -15,6 +16,7 @@ function Login() {
     const [toast, setToast] = useState({ show: false, message: '', type: '' });
     const navigate = useNavigate()
     const { login } = useAuth()
+    const [loading, setLoading] = useState(false)
 
 
     const showToast = (message, type) => {
@@ -43,6 +45,8 @@ function Login() {
 
     const handleLogin = async (e) => {
         e.preventDefault()
+
+        setLoading(true)
         if (validLogin()) {
             try {
 
@@ -55,6 +59,7 @@ function Login() {
 
                 if(response.status === 200){
                     navigate('/dashboard')
+                    setLoading(false)
                 }
 
             } catch (error) {
@@ -64,6 +69,7 @@ function Login() {
                     errorMessage = error.response.data.message || error.response.data.error || errorMessage;
                 }
 
+                setLoading(false)
                 showToast(errorMessage, 'error');
 
             }
@@ -119,6 +125,7 @@ function Login() {
                         <button className='bg-orange-700 text-white p-1 px-2 rounded-md w-1/3 m-auto' type='submit'>Login</button>
                     </form>
                 </div>
+                {loading ? <Loader/> : <div></div>}
             </div>
 
             {toast.show && (
