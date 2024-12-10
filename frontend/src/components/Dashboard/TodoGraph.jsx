@@ -11,6 +11,7 @@ import { useAuth } from '../../contexts'
 import { GET_TODOS } from '../../utils/constants';
 import { apiClient } from '../../lib/apiClient';
 import Toast from '../Templates/Toast';
+import Loader from '../Templates/Loader';
 
 
 ChartJS.register(RadialLinearScale, ArcElement, Tooltip, Legend);
@@ -28,6 +29,7 @@ function TodoGraph() {
     const [chartData, setChartData] = useState({ ubni: 0, ibnu: 0, unb: 0, other: 0 });
     const [chartKey, setChartKey] = useState(0);
     const [toast, setToast] = useState({ show: false, message: '', type: '' });
+    const [loading, setLoading] = useState(false)
 
 
     const showToast = (message, type) => {
@@ -38,9 +40,12 @@ function TodoGraph() {
 
 
     const fetchTodos = async (userId, date) => {
+        setLoading(true)
         try {
 
             const response = await apiClient.post(GET_TODOS, { user: userId, date: date }, { headers: { 'Content-Type': 'application/json' } })
+
+            setLoading(false)
 
             setTodos(response.data.todos)
 
@@ -49,6 +54,8 @@ function TodoGraph() {
             if (error.response) {
                 errorMessage = error.response.data.message || error.response.data.error || errorMessage;
             }
+
+            setLoading(false)
 
             showToast(errorMessage, 'error');
         }
@@ -199,6 +206,7 @@ function TodoGraph() {
                         <p className='text-white'>Other</p>
                     </div>
                 </div>
+                {loading ? <Loader/> : <div></div>}
             </div>
 
             {toast.show && (
