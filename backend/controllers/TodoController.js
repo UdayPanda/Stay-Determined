@@ -69,6 +69,85 @@ export const getTodos = async (req, res, next) => {
     }
 }
 
+
+export const getLabelCounts = async (req, res, next) => {
+    try {
+        const { user, date } = req.body;
+
+        if (!user || !date) {
+            return res.status(400).json({
+                success: false,
+                message: "Please provide user and date",
+            });
+        }
+
+        const labelCounts = await Todo.aggregate([
+            {
+                $match: {
+                    user: mongoose.Types.ObjectId(user), // Ensure user is an ObjectId
+                    date: {
+                        $gte: new Date(date),
+                        $lt: new Date(new Date(date).getTime() + 24 * 60 * 60 * 1000), // Match the specific day
+                    },
+                },
+            },
+            {
+                $group: {
+                    _id: "$label",
+                    count: { $sum: 1 },
+                },
+            },
+        ]);
+
+        // Convert the aggregation result to an object with label as keys
+        const labelCountsObject = labelCounts.reduce((acc, item) => {
+            acc[item._id] = item.count;
+            return acc;
+        }, {});
+
+        return res.status(200).json({
+            success: true,
+            message: "Label counts fetched successfully",
+            labelCounts: labelCountsObject,
+        });
+    } catch (error) {
+        console.log(error);
+        return res.status(500).json({
+            success: false,
+            message: "Internal server error",
+        });
+    }
+};
+
+
+export const getExpanseTodos = async (req, res, next) => {
+    try {
+
+        const { user } = req.body;
+        
+        if (!user) {
+            return res.status(400).json({
+                success: false,
+                message: "Please provide user"
+            })
+        }
+       
+        const todos = await Todo.find({ user, exapnse: true })
+        return res.status(200).json({
+            success: true,
+            message: "Todos fetched successfully",
+            todos
+        })
+
+    } catch (error) {
+        console.log(error);
+        return res.status(500).json({
+            success: false,
+            message: 'Internal server error'
+        })
+    }
+}
+
 export const deleteTodo = async (req, res, next)=> {
     try {
     
