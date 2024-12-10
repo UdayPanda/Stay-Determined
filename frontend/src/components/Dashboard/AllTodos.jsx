@@ -4,6 +4,8 @@ import TodoItem from '../Todo/TodoItem'
 import { apiClient } from '../../lib/apiClient'
 import { DELETE_TODO, GET_TODOS, UPDATE_TODO } from '../../utils/constants'
 import Toast from '../Templates/Toast'
+import Prompt from '../Templates/Prompt'
+import Loader from '../Templates/Loader'
 
 function AllTodos({ label }) {
 
@@ -24,6 +26,20 @@ function AllTodos({ label }) {
         3: "Urgent and Important",
         4: "Other"
     }
+    const [loading, setLoading] = useState(false)
+    const [isPromptOpen, setPromptOpen] = useState(false);
+
+    const handleOpenPrompt = () => {
+        setPromptOpen(true);
+    };
+
+    const handleConfirm = () => {
+        setPromptOpen(false);
+    };
+
+    const handleCancel = () => {
+        setPromptOpen(false);
+    };
 
 
     const showToast = (message, type) => {
@@ -44,11 +60,14 @@ function AllTodos({ label }) {
 
     const fetchTodos = async (userId, date) => {
 
+        setLoading(true)
+
         try {
             const response = await apiClient.post(GET_TODOS, { user: userId, date }, { headers: { 'Content-Type': 'application/json' } })
 
             if (todoLabel && todoLabel > 0) {
                 todosFilterByLabelProvidedInProp(response.data.todos)
+                setLoading(false)
             }
             else setTodos(response.data.todos)
 
@@ -57,7 +76,7 @@ function AllTodos({ label }) {
             if (error.response) {
                 errorMessage = error.response.data.message || error.response.data.error || errorMessage;
             }
-
+            setLoading(false)
             showToast(errorMessage, 'error');
         }
 
@@ -68,6 +87,8 @@ function AllTodos({ label }) {
         try {
             const response = await apiClient.post(UPDATE_TODO, { id, todo }, { headers: { 'Content-Type': 'application/json' } })
             setTodos((prev) => prev.map((prevTodo) => prevTodo._id === id ? response.data.todo : prevTodo))
+            showToast('Todo saved successfully!', 'success');
+
         } catch (error) {
             let errorMessage = "Something went wrong.";
             if (error.response) {
@@ -80,9 +101,14 @@ function AllTodos({ label }) {
 
     const removeTodo = async (id) => {
 
+        handleOpenPrompt()
+
         try {
             await apiClient.delete(`${DELETE_TODO}/${id}`, { headers: { 'Content-Type': 'application/json' } })
             setTodos((prev) => prev.filter((prevTodo) => prevTodo._id !== id))
+
+            showToast('Todo deleted successfully!', 'success');
+
         } catch (error) {
             let errorMessage = "Something went wrong.";
             if (error.response) {
@@ -153,6 +179,8 @@ function AllTodos({ label }) {
 
             <div className='text-gray-400 text-md mt-2 mx-auto w-[80%] lg:w-[60%]'>Total Todos {todos.length}/ Completed {countCompleted}</div>
 
+            {loading ? <Loader/> : <div></div>}
+
             <TodoProvider value={{ todos, updateTodo, toggleComplete, removeTodo }}>
                 <div className="flex flex-wrap gap-y-3 w-[80%] lg:w-[60%] mx-auto mt-8">
                     {todos.map((todo) => (
@@ -171,6 +199,14 @@ function AllTodos({ label }) {
                     show={toast.show}
                 />
             )}
+
+            <Prompt>
+                isOpen={isPromptOpen}
+                title="Confirm Deletion"
+                message="Are you sure you want to delete this item?"
+                onConfirm={handleConfirm}
+                onCancel={handleCancel}
+            </Prompt>
         </>
     )
 
