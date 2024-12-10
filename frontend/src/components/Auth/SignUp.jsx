@@ -3,6 +3,7 @@ import { apiClient } from '../../lib/apiClient.js'
 import { SIGNUP_ROUTE } from '../../utils/constants.js'
 import { useNavigate } from 'react-router-dom'
 import Toast from '../Templates/Toast.jsx'
+import Loader from '../Templates/Loader.jsx'
 
 function SignUp() {
 
@@ -14,6 +15,7 @@ function SignUp() {
     const [toast, setToast] = useState({ show: false, message: '', type: '' });
     const [showPassword, setShowPassword] = useState(false);
     const navigate = useNavigate()
+    const [loading, setLoading] = useState(false);
 
     const showToast = (message, type) => {
         setToast({ show: true, message, type });
@@ -45,14 +47,17 @@ function SignUp() {
 
     const handleSignUp = async (e) => {
         e.preventDefault()
+        setLoading(true)
 
         if (validSignUp()) {
             try {
 
                 const response = await apiClient.post(SIGNUP_ROUTE, { name, phone, email, password })
+                
                 showToast("Account created successfully", 'success')
-
+                
                 if (response.status === 201){
+                    setLoading(false)
                     navigate("/login")
                   }
 
@@ -60,8 +65,11 @@ function SignUp() {
 
                 let errorMessage = "An error occurred during account creation";
                 if (error.response) {
+
                     errorMessage = error.response.data.message || error.response.data.error || errorMessage;
                 }
+
+                setLoading(false)
 
                 showToast(errorMessage, 'error');
 
@@ -142,6 +150,8 @@ function SignUp() {
                     </form>
                 </div>
             </div>
+
+            {loading ? <Loader/> : <div></div>}
 
             {toast.show && (
                 <Toast
