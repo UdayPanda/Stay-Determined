@@ -21,6 +21,8 @@ function AddTodo() {
         try {
             const response = await apiClient.post(ADD_TODO, todo, { headers: { 'Content-Type': 'application/json' } })
             setTodos((prev) => [...prev, response.data.todo])
+            showToast('Todo added successfully!', 'success');
+
         } catch (error) {
             let errorMessage = "Something went wrong.";
             if (error.response) {
