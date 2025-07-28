@@ -17,7 +17,7 @@ function Toast({show = false, message, type = 'info', duration = 10000}) {
 
     if (!visible) return null
 
-    const baseStyles = "absolute top-20 left-48 z-50 flex items-center justify-evenly p-2 rounded-lg text-center";
+    const baseStyles = "fixed top-20 left-48 z-50 flex items-center justify-evenly p-2 rounded-lg text-center";
     
     let toastStyles = '';
     switch (type) {

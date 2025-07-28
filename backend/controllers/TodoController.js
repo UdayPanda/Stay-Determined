@@ -1,5 +1,5 @@
 import Todo from '../models/TodoModel.js'
-
+import mongoose from 'mongoose';
 
 export const addTodo = async (req, res, next) => {
     try {
@@ -53,7 +53,8 @@ export const getTodos = async (req, res, next) => {
             })
         }
        
-        const todos = await Todo.find({ user, date })
+        const userId = new mongoose.Types.ObjectId(user);
+        const todos = await Todo.find({ user: userId, date })
         return res.status(200).json({
             success: true,
             message: "Todos fetched successfully",

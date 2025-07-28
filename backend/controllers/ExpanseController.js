@@ -1,4 +1,4 @@
-import Expanse from "../models/ExpanseModal.js";
+import Expanse from "../models/ExpanseModel.js";
 
 
 export const addExpanse = async (req, res) => {

@@ -1,5 +1,6 @@
 import mongoose from "mongoose";
-import { genSalt, hash } from "bcrypt";
+// import { genSalt, hash } from "bcrypt";
+import bcrypt from "bcryptjs";
 
 
 const userSchema = new mongoose.Schema({
@@ -18,8 +19,8 @@ const userSchema = new mongoose.Schema({
     },
     phone: {
         type: String,
-        required: [true, "Phone is required"],
-        unique: true,
+        // required: [true, "Phone is required"],
+        // unique: true,
     },
     isAdmin: {
         type: Boolean,
@@ -36,15 +37,27 @@ const userSchema = new mongoose.Schema({
 })
 
 
+// userSchema.pre("save", async function(next) {
+//     if(!this.isModified("password")) {  
+//         return next();
+//     }
+//     const salt = await genSalt(10);
+//     const hashing = await hash(this.password, salt);
+//     this.password = hashing;
+//     next();
+// })
+
 userSchema.pre("save", async function(next) {
-    if(!this.isModified("password")) {  
+    if (!this.isModified("password")) {  
         return next();
     }
-    const salt = await genSalt(10);
-    const hashing = await hash(this.password, salt);
-    this.password = hashing;
+
+    const salt = await bcrypt.genSalt(10);
+    const hashedPassword = await bcrypt.hash(this.password, salt);
+    this.password = hashedPassword;
+
     next();
-})
+});
 
 const User = mongoose.model("Users", userSchema);
 

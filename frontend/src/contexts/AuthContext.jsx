@@ -1,23 +1,27 @@
 import { useContext, createContext, useState, useEffect } from "react"
-import { jwtDecode } from 'jwt-decode'
+import { apiClient } from "../lib/apiClient"
 
 const AuthContext = createContext()
 
 export const AuthProvider = ({ children })=> {
-    const [user, setUser] = useState(null)
+    const [
+        user, setUser] = useState(null)
     const [loading, setLoading] = useState(true)
 
-    
     useEffect(() => {
-        const token = localStorage.getItem("token");
+        const fetchUser = async () => {
+            const token = localStorage.getItem("token");
         if (token) {
             try {
-                const decodeUser = jwtDecode(token);
-                setUser(decodeUser)
+                const response = await apiClient.post("api/auth/decode", { token })
+                setUser(response.data.user)
             } catch (error) {
                 console.error("Failed to decode token:", error);
             }
         }
+        }
+
+        fetchUser();
         setLoading(false);
     }, []);
 
@@ -34,5 +38,3 @@ export const AuthProvider = ({ children })=> {
 export const useAuth = ()=>{
     return useContext(AuthContext)
 }
-
-

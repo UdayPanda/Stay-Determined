@@ -5,6 +5,7 @@ import mongoose from "mongoose";
 import authRoute from "./routes/AuthRoute.js";
 import todoRoute from "./routes/TodoRoute.js";
 import expanseRoute from "./routes/ExpanseRoute.js";
+import noteRoute from "./routes/NoteRoute.js";
 
 
 dotenv.config()
@@ -15,13 +16,13 @@ const origin = process.env.ORIGIN
 const db = process.env.DB_URL
 
 app.use(cors({
-    origin: 'https://stay-determined-frontend.onrender.com', 
+    origin: 'http://localhost:5173', 
     methods: ['GET', 'POST', 'PUT', 'DELETE'],
     credentials: true,  
 }));
 
 app.options('*', cors({
-    origin: 'https://stay-determined-frontend.onrender.com', 
+    origin: 'http://localhost:5173', 
     methods: ['GET', 'POST', 'PUT', 'DELETE'],
     credentials: true,
 }));
@@ -30,6 +31,7 @@ app.use(express.json())
 
 app.use('/api/auth', authRoute)
 app.use('/api/todos', todoRoute)
+app.use('/api/notes', noteRoute)
 app.use('/api/expanse', expanseRoute)
 
 app.listen(port, ()=>{

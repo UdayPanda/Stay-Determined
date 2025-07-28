@@ -1,0 +1,25 @@
+# Ignore dependencies
+node_modules
+npm-debug.log
+
+# Ignore environment variables
+# .env
+# .env.*  # optional for multi-env
+
+# Ignore local logs
+*.log
+
+# OS/System files
+.DS_Store
+Thumbs.db
+
+# Vite/React build (only for dev Dockerfile; not when you're using "build" stage)
+#dist
+
+# IDE/editor settings
+.vscode
+.idea
+
+# Git files
+.git
+.gitignore

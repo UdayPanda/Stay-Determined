@@ -1,6 +1,7 @@
 import React from 'react'
 import { Link, NavLink } from 'react-router-dom'
 import { useAuth } from '../../contexts/AuthContext.jsx'
+import logo from '../../assets/Stay-determined-logo.png'
 
 export default function Header() {
 
@@ -17,13 +18,14 @@ export default function Header() {
                 <div className="flex flex-wrap justify-between items-center mx-auto max-w-screen-xl">
                     <Link to="/" className="flex items-center">
                         <img
-                            src='https://cdn.pixabay.com/photo/2022/03/21/07/02/fire-7082466_1280.png'
-                            className="h-5 md:h-8 lg:mr-3 lg:h-12"
+                            src={logo}
+                            className="h-5 md:h-8 lg:mr-1 lg:h-12"
                             alt="Logo"
                         />
                         <span className="font-dancing-script self-center text-xl lg:text-4xl sm:text-lg whitespace-nowrap">Stay Determined!</span>
+
                     </Link>
-                    <div className="flex items-center lg:order-2">
+                    <div className="flex items-center lg:order-2">  
                         <Link
                             to={user ? "/profile": "/login"}
                             className="text-gray-800 hover:bg-gray-50 focus:ring-4 focus:ring-gray-300 font-medium rounded-lg text-sm px-4 lg:px-5 py-2 lg:py-2.5 mr-2 focus:outline-none"

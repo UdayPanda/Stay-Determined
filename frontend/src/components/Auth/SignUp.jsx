@@ -1,7 +1,7 @@
 import React, { useState } from 'react'
 import { apiClient } from '../../lib/apiClient.js'
 import { SIGNUP_ROUTE } from '../../utils/constants.js'
-import { useNavigate } from 'react-router-dom'
+import { Link, useNavigate } from 'react-router-dom'
 import Toast from '../Templates/Toast.jsx'
 import Loader from '../Templates/Loader.jsx'
 
@@ -147,6 +147,7 @@ function SignUp() {
                                 required />
                         </div>
                         <button className='bg-orange-700 text-white p-1 px-2 rounded-md w-1/3 m-auto' type='submit'>Sign Up</button>
+                        <p className='text-center'>Already have an account? <Link to="/login" className='text-orange-700 italic'>Login</Link></p>
                     </form>
                 </div>
             </div>

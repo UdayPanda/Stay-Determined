@@ -41,7 +41,7 @@ function AddTodo() {
                 <div className="w-[80%] lg:w-[50%] mx-auto bg-blue-300 p-4 rounded-md relative mb-4">
 
                     <TodoForm />
-                </div>
+    </div>
 
             </TodoProvider>
 

@@ -1,6 +1,7 @@
 import React from 'react'
 import { Link, NavLink } from 'react-router-dom'
 import { useAuth } from '../../contexts';
+import logo from '../../assets/Stay-determined-logo.png'
 
 export default function Navbar() {
 
@@ -18,7 +19,7 @@ export default function Navbar() {
                 <div className="flex flex-wrap justify-between items-center mx-auto max-w-screen-xl">
                     <Link to="/" className="flex items-center">
                         <img
-                            src='https://cdn.pixabay.com/photo/2022/03/21/07/02/fire-7082466_1280.png'
+                            src={logo}
                             className="h-5 md:h-8 lg:mr-3 lg:h-8"
                             alt="Logo"
                         />

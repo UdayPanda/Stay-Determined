@@ -4,7 +4,6 @@ import TodoItem from '../Todo/TodoItem'
 import { apiClient } from '../../lib/apiClient'
 import { DELETE_TODO, GET_TODOS, UPDATE_TODO } from '../../utils/constants'
 import Toast from '../Templates/Toast'
-import Prompt from '../Templates/Prompt'
 import Loader from '../Templates/Loader'
 
 function AllTodos({ label }) {
@@ -27,20 +26,6 @@ function AllTodos({ label }) {
         4: "Other"
     }
     const [loading, setLoading] = useState(false)
-    const [isPromptOpen, setPromptOpen] = useState(false);
-
-    const handleOpenPrompt = () => {
-        setPromptOpen(true);
-    };
-
-    const handleConfirm = () => {
-        setPromptOpen(false);
-    };
-
-    const handleCancel = () => {
-        setPromptOpen(false);
-    };
-
 
     const showToast = (message, type) => {
         setToast({ show: true, message, type });
@@ -85,6 +70,7 @@ function AllTodos({ label }) {
 
     const updateTodo = async (id, todo) => {
         try {
+
             const response = await apiClient.post(UPDATE_TODO, { id, todo }, { headers: { 'Content-Type': 'application/json' } })
             setTodos((prev) => prev.map((prevTodo) => prevTodo._id === id ? response.data.todo : prevTodo))
             showToast('Todo saved successfully!', 'success');
@@ -100,8 +86,6 @@ function AllTodos({ label }) {
     }
 
     const removeTodo = async (id) => {
-
-        handleOpenPrompt()
 
         try {
             await apiClient.delete(`${DELETE_TODO}/${id}`, { headers: { 'Content-Type': 'application/json' } })
@@ -200,13 +184,7 @@ function AllTodos({ label }) {
                 />
             )}
 
-            <Prompt>
-                isOpen={isPromptOpen}
-                title="Confirm Deletion"
-                message="Are you sure you want to delete this item?"
-                onConfirm={handleConfirm}
-                onCancel={handleCancel}
-            </Prompt>
+            
         </>
     )
 
