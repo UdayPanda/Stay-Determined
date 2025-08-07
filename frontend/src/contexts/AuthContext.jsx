@@ -13,7 +13,7 @@ export const AuthProvider = ({ children })=> {
             const token = localStorage.getItem("token");
         if (token) {
             try {
-                const response = await apiClient.post("api/auth/decode", { token })
+                const response = await apiClient.post("api/auth/decode", { token }, { headers: { 'Content-Type': 'application/json' } })
                 setUser(response.data.user)
             } catch (error) {
                 console.error("Failed to decode token:", error);
