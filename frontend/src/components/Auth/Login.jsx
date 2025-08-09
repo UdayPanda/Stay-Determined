@@ -38,6 +38,11 @@ function Login() {
       return false;
     }
 
+    if (email && !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
+      showToast("Invalid email format", "error");
+      return false;
+    }
+
     return true;
   };
 
@@ -94,6 +99,7 @@ function Login() {
                 className="bg-gray-200 p-1 px-2 rounded-md outline-none"
                 type="text"
                 id="phone"
+                maxLength={10}
                 value={phone}
                 onChange={(e) => setPhone(e.target.value)}
                 required

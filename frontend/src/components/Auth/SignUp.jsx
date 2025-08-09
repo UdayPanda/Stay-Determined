@@ -32,6 +32,31 @@ function SignUp() {
             return false
         }
 
+        if (email && !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
+            showToast("Invalid email format", 'error')
+            return false
+        }
+
+        if (name.length < 3 || name.length > 50) {
+            showToast("Name must be between 3 and 50 characters", 'error')
+            return false
+        }   
+
+        if (name && !/^[a-zA-Z\s]+$/.test(name)) {
+            showToast("Name can only contain letters and spaces", 'error')
+            return false
+        }
+
+        if (password.length < 6) {
+            showToast("Password must be at least 6 characters long", 'error')
+            return false
+        }
+
+        if (password && !/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)[a-zA-Z\d]{6,}$/.test(password)) {
+            showToast("Password must contain at least one uppercase letter, one lowercase letter, and one number", 'error')
+            return false
+        }
+
         if (!phoneNumberPattern.test(phone)) {
             showToast("Invalid phone number", 'error')
             return false
@@ -92,6 +117,7 @@ function SignUp() {
                                 type='text'
                                 id='name'
                                 value={name}
+                                maxLength={50}
                                 onChange={(e) => setName(e.target.value)}
                                 required />
                         </div>
@@ -103,6 +129,7 @@ function SignUp() {
                                 className='bg-gray-200 p-1 px-2 rounded-md outline-none'
                                 type='text'
                                 id='phone'
+                                maxLength={10}
                                 value={phone}
                                 onChange={(e) => setPhone(e.target.value)}
                                 required />
