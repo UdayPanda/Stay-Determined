@@ -92,6 +92,7 @@ function SignUp() {
                                 type='text'
                                 id='name'
                                 value={name}
+                                maxLength={50}
                                 onChange={(e) => setName(e.target.value)}
                                 required />
                         </div>
@@ -104,6 +105,7 @@ function SignUp() {
                                 type='text'
                                 id='phone'
                                 value={phone}
+                                maxLength={10}
                                 onChange={(e) => setPhone(e.target.value)}
                                 required />
                         </div>
