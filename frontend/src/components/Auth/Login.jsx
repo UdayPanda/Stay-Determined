@@ -95,6 +95,7 @@ function Login() {
                 type="text"
                 id="phone"
                 value={phone}
+                maxLength={10}
                 onChange={(e) => setPhone(e.target.value)}
                 required
               />
