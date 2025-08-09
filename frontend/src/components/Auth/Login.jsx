@@ -38,6 +38,11 @@ function Login() {
       return false;
     }
 
+    if (email && !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
+      showToast("Invalid email format", "error");
+      return false;
+    }
+
     return true;
   };
 
