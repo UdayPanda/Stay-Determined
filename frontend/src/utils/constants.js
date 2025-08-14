@@ -5,6 +5,7 @@ export const SIGNUP_ROUTE = `${AUTH_ROUTE}/signup`;
 export const LOGIN_ROUTE = `${AUTH_ROUTE}/login`;
 export const LOGIN_ROUTE_GOOGLE = `${AUTH_ROUTE}/google`;
 export const FORGOT_PASSWORD_ROUTE = `${AUTH_ROUTE}/forgot-password`;
+export const SEARCH_ROUTE = `${AUTH_ROUTE}/search`;
 
 export const TODO_ROUTE = "api/todos";
 export const ADD_TODO = `${TODO_ROUTE}/add`;

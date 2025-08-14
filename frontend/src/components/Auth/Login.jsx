@@ -52,21 +52,28 @@ function Login() {
     setLoading(true);
     if (validLogin()) {
       try {
-        const response = await apiClient.post(LOGIN_ROUTE, {
-          phone,
-          email,
-          password,
-        });
-        localStorage.setItem("token", response.data.token);
+        const response = await apiClient.post(
+          LOGIN_ROUTE,
+          {
+            phone,
+            email,
+            password,
+          },
+          {
+            headers: { "Content-Type": "application/json" },
+            withCredentials: true,
+          }
+        );
 
+        const token = response.data.token; 
+        if (token) {
+          localStorage.setItem("token", token);
+        }
+
+        login(response.data); 
         showToast("Logged in successfully", "success");
 
-        login(response.data);
-
-        if (response.status === 200) {
-          navigate("/dashboard");
-          setLoading(false);
-        }
+        navigate("/dashboard");
       } catch (error) {
         let errorMessage = "An error occurred during account login.";
         if (error.response) {
@@ -173,8 +180,7 @@ function Login() {
                     showToast("Logged in via Google", "success");
                     setLoading(false);
                   } catch (error) {
-                    let errorMessage =
-                      "Google login failed";
+                    let errorMessage = "Google login failed";
                     if (error.response) {
                       errorMessage =
                         error.response.data.message ||

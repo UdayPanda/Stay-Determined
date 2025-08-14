@@ -57,7 +57,7 @@ function SignUp() {
             return false
         }
 
-        if (!phoneNumberPattern.test(phone)) {
+        if (!phoneNumberPattern.test(phone) || phone.startsWith("0") || phone == "" || phone.length !== 10 ) {
             showToast("Invalid phone number", 'error')
             return false
         }
