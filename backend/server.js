@@ -17,13 +17,13 @@ const origin = process.env.ORIGIN
 const db = process.env.DB_URL
 
 app.use(cors({
-    origin: 'http://localhost:5173', 
+    origin: 'https://stay-determined-frontend.onrender.com', 
     methods: ['GET', 'POST', 'PUT', 'DELETE'],
     credentials: true,  
 }));
 
 app.options('*', cors({
-    origin: 'http://localhost:5173', 
+    origin: 'https://stay-determined-frontend.onrender.com', 
     methods: ['GET', 'POST', 'PUT', 'DELETE'],
     credentials: true,
 }));

@@ -52,21 +52,12 @@ export const AuthProvider = ({ children }) => {
         const fetchUser = async () => {
             setLoading(true); 
             const token = localStorage.getItem("token");
-
-            if (token) {
-                try {
-                    const response = await apiClient.post(
-                        "api/auth/decode",
-                        { token },
-                        { headers: { "Content-Type": "application/json" } }
-                    );
-                    setUser(response.data.user || null);
-                } catch (error) {
-                    console.error("Failed to decode token:", error);
-                    setUser(null);
-                }
-            } else {
-                setUser(null);
+        if (token) {
+            try {
+                const response = await apiClient.post("api/auth/decode", { token }, { headers: { 'Content-Type': 'application/json' } })
+                setUser(response.data.user)
+            } catch (error) {
+                console.error("Failed to decode token:", error);
             }
 
             setLoading(false); 

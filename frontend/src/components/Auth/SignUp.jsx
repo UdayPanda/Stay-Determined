@@ -57,7 +57,8 @@ function SignUp() {
             return false
         }
 
-        if (!phoneNumberPattern.test(phone) || phone.startsWith("0") || phone == "" || phone.length !== 10 ) {
+
+        if (!phoneNumberPattern.test(phone)) {
             showToast("Invalid phone number", 'error')
             return false
         }
@@ -131,6 +132,7 @@ function SignUp() {
                                 id='phone'
                                 maxLength={10}
                                 value={phone}
+                                maxLength={10}
                                 onChange={(e) => setPhone(e.target.value)}
                                 required />
                         </div>
