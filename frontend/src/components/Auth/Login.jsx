@@ -52,21 +52,28 @@ function Login() {
     setLoading(true);
     if (validLogin()) {
       try {
-        const response = await apiClient.post(LOGIN_ROUTE, {
-          phone,
-          email,
-          password,
-        });
-        localStorage.setItem("token", response.data.token);
+        const response = await apiClient.post(
+          LOGIN_ROUTE,
+          {
+            phone,
+            email,
+            password,
+          },
+          {
+            headers: { "Content-Type": "application/json" },
+            withCredentials: true,
+          }
+        );
 
+        const token = response.data.token; 
+        if (token) {
+          localStorage.setItem("token", token);
+        }
+
+        login(response.data.user, response.data.token); 
         showToast("Logged in successfully", "success");
 
-        login(response.data);
-
-        if (response.status === 200) {
-          navigate("/dashboard");
-          setLoading(false);
-        }
+        navigate("/dashboard");
       } catch (error) {
         let errorMessage = "An error occurred during account login.";
         if (error.response) {
@@ -99,6 +106,7 @@ function Login() {
                 className="bg-gray-200 p-1 px-2 rounded-md outline-none"
                 type="text"
                 id="phone"
+                maxLength={10}
                 value={phone}
                 maxLength={10}
                 onChange={(e) => setPhone(e.target.value)}
@@ -150,7 +158,7 @@ function Login() {
             </button>
 
             <p className="text-center">
-              Don't have an account?{" "}
+              Don&apos;t have an account?{" "}
               <Link to="/signup" className="text-orange-700 italic">
                 Register
               </Link>
@@ -168,13 +176,12 @@ function Login() {
                     });
 
                     localStorage.setItem("token", response.data.token);
-                    login(response.data); // From context
+                    login(response.data.user, response.data.token); // From context
                     navigate("/dashboard");
                     showToast("Logged in via Google", "success");
                     setLoading(false);
                   } catch (error) {
-                    let errorMessage =
-                      "Google login failed";
+                    let errorMessage = "Google login failed";
                     if (error.response) {
                       errorMessage =
                         error.response.data.message ||

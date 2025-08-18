@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import { useState } from 'react'
 import { apiClient } from '../../lib/apiClient.js'
 import { SIGNUP_ROUTE } from '../../utils/constants.js'
 import { Link, useNavigate } from 'react-router-dom'
@@ -56,6 +56,7 @@ function SignUp() {
             showToast("Password must contain at least one uppercase letter, one lowercase letter, and one number", 'error')
             return false
         }
+
 
         if (!phoneNumberPattern.test(phone)) {
             showToast("Invalid phone number", 'error')
@@ -129,6 +130,7 @@ function SignUp() {
                                 className='bg-gray-200 p-1 px-2 rounded-md outline-none'
                                 type='text'
                                 id='phone'
+                                maxLength={10}
                                 value={phone}
                                 maxLength={10}
                                 onChange={(e) => setPhone(e.target.value)}

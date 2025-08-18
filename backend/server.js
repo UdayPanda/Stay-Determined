@@ -1,6 +1,7 @@
 import express  from "express";
 import cors from "cors";
 import dotenv from "dotenv";
+import cookieParser from "cookie-parser";
 import mongoose from "mongoose";
 import authRoute from "./routes/AuthRoute.js";
 import todoRoute from "./routes/TodoRoute.js";
@@ -27,6 +28,7 @@ app.options('*', cors({
     credentials: true,
 }));
 
+app.use(cookieParser());
 app.use(express.json())
 
 app.use('/api/auth', authRoute)

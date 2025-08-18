@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { PolarArea } from "react-chartjs-2";
 import {
   Chart as ChartJS,
@@ -309,16 +309,21 @@ function TodoGraph() {
         onChange={(e) => setDate(e.target.value)}
       />
 
-      <h1 className="text-2xl text-white font-bold text-center m-5 mt-10 lg:mt-2">
-        Manage Your Todos
-      </h1>
+      <div className="text-center mb-10">
+        <h1 className="text-2xl lg:text-5xl font-bold text-white mb-3 tracking-tight">
+          Manage Your Todos
+        </h1>
+        <p className="text-slate-400 text-md lg:text-lg">
+          Track your todos and plan your day
+        </p>
+      </div>
 
       <div className="relative">
         <div className="w-[75%] lg:w-[40%] text-white ml-[15%] lg:ml-[30%]">
           <PolarArea data={data} key={chartKey} options={options} />
         </div>
 
-        <div className="absolute top-70 lg:top-80 right-20">
+        <div className="absolute hidden lg:block top-70 lg:top-80 right-20">
           <div className="text-white text-md font-bold m-2">
             Upcoming Todos: {todos.length}
           </div>
@@ -345,13 +350,13 @@ function TodoGraph() {
         </div>
 
         <div>
-          <div className="max-w-6xl rounded-xl mx-auto mt-6 p-6 bg-gradient-to-br from-slate-50 to-slate-100">
+          <div className="max-w-6xl rounded-xl mx-auto mt-6 p-6 bg-gradient-to-br from-slate-400 via-slate-200 to-gray-400 shadow-lg">
             {/* Header Section */}
             <div className="text-center mb-8">
-              <h1 className="text-4xl font-bold text-slate-800 mb-2">
+              <h1 className="text-2xl lg:text-4xl font-bold text-slate-800 mb-2">
                 Journal Here
               </h1>
-              <p className="text-slate-600">
+              <p className="text-slate-600 text-sm lg:text-lg">
                 Capture your thoughts, ideas, and reflections
               </p>
             </div>
@@ -380,12 +385,14 @@ function TodoGraph() {
                     </div>
                     <span
                       className={`absolute top-0 right-2 text-xl cursor-pointer ${
-                        !note._id ? "opacity-40 cursor-default" : ""}`}
+                        !note._id ? "opacity-40 cursor-default" : ""
+                      }`}
                       title="Delete"
                       onClick={
                         note._id ? () => deleteNote(note._id) : undefined
                       }
-                    >&#8942;
+                    >
+                      &#8942;
                     </span>
                   </div>
                 </div>
@@ -396,7 +403,7 @@ function TodoGraph() {
             <div className="text-center flex justify-center">
               <button
                 onClick={addNote}
-                className="inline-flex items-center px-6 py-3 bg-blue-600 hover:bg-blue-700 text-white font-medium rounded-lg transition-colors duration-200 shadow-md hover:shadow-lg"
+                className="inline-flex items-center px-2 py-1 text-md lg:text-xl lg:px-6 lg:py-2 bg-blue-600 hover:bg-blue-700 text-white font-medium rounded-lg transition-colors duration-200 shadow-md hover:shadow-lg"
               >
                 <svg
                   className="w-5 h-5 mr-2"
@@ -416,7 +423,7 @@ function TodoGraph() {
 
               <button
                 onClick={saveNote}
-                className="inline-flex items-center ml-6 px-6 py-3 bg-blue-600 hover:bg-blue-700 text-white font-medium rounded-lg transition-colors duration-200 shadow-md hover:shadow-lg"
+                className="inline-flex items-center ml-4 px-2 py-1 text-md lg:text-xl lg:px-6 lg:py-2 bg-blue-600 hover:bg-blue-700 text-white font-medium rounded-lg transition-colors duration-200 shadow-md hover:shadow-lg"
               >
                 Save
               </button>

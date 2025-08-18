@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react'
+import { useEffect, useState } from 'react'
 import { useAuth } from '../../contexts'
 import { GET_TODOS } from '../../utils/constants'
 import { apiClient } from '../../lib/apiClient.js'
@@ -44,26 +44,53 @@ function Tasks({ onError }) {
 
     }, [user])
 
+    const toggleTask = (taskId) => {
+    // setTasks((prev) => ({
+    //   ...prev,
+    //   tasks: prev.tasks.map((task) => (task.id === taskId ? { ...task, completed: !task.completed } : task)),
+    // }))
+    console.log(taskId);
+    
+  }
+
 
     return (
-        <div className='flex bg-[#e5e7eb] rounded-md h-80'>
-            <div className='flex flex-col items-center gap-2 w-full m-2 text-gray-700 overflow-y-scroll scrollbar-none'>
-                <div className='font-semibold'>Tasks</div>
+        <div className=''>
+            {tasks.map((task) => (
+                <div key={task.id} className="mb-3 last:mb-0 p-2 rounded-lg hover:bg-purple-500/5 transition-colors">
+                  <label className="flex items-center space-x-3 cursor-pointer">
+                    <input
+                      type="checkbox"
+                      checked={task.completed}
+                      onChange={() => toggleTask(task.id)}
+                      className="w-4 h-4 text-purple-500 bg-slate-700 border-slate-600 rounded focus:ring-purple-500 focus:ring-2"
+                    />
+                    <span
+                      className={`text-sm transition-all ${task.completed ? "text-slate-500 line-through" : "text-slate-300"}`}
+                    >
+                      {task.title}
+                    </span>
+                  </label>
+                </div>
+              ))}
 
-                {tasks && tasks.filter((task) => task.expanse === true).map((item) => (
-                    <div className='relative p-1 w-full h-9 rounded-md shadow-md bg-[#e1d7b7]'>
-
-                        <div className='text-gray-700 text-xs'>{item.title}</div>
-                        <div className='absolute top-1 right-3 text-red-700 text-xs'>{item.reminder}</div>
-                        <div className='flex absolute top-5 left-1'>
-                            <p className='text-gray-600 w-44 h-3 overflow-hidden text-[10px]'>{labelInfo[item.label]}</p>
-                        </div>
-
-                    </div>
-                ))}
-
-           
-            </div>
+              {/* {tasks && tasks.filter((task) => task.expanse === true).map((item) => (
+                <div key={item.id} className="mb-3 last:mb-0 p-2 rounded-lg hover:bg-purple-500/5 transition-colors">
+                  <label className="flex items-center space-x-3 cursor-pointer">
+                    <input
+                      type="checkbox"
+                      checked={item.completed}
+                      onChange={() => toggleTask(item.id)}
+                      className="w-4 h-4 text-purple-500 bg-slate-700 border-slate-600 rounded focus:ring-purple-500 focus:ring-2"
+                    />
+                    <span
+                      className={`text-sm transition-all ${item.completed ? "text-slate-500 line-through" : "text-slate-300"}`}
+                    >
+                      {item.title}
+                    </span>
+                  </label>
+                </div>
+              ))} */}
         </div>
     )
 }

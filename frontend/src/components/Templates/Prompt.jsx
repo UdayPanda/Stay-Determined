@@ -1,5 +1,3 @@
-import React from 'react';
-
 const Prompt = ({ 
   title = "Are you sure?", 
   message = "Do you want to proceed?", 

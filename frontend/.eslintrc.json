@@ -1,0 +1,29 @@
+{
+  "extends": [
+    "@eslint/js",
+    "globals"
+  ],
+  "plugins": [
+    "react",
+    "react-hooks",
+    "react-refresh"
+  ],
+  "rules": {
+    "react/prop-types": "off",
+    "react/no-unescaped-entities": "off",
+    "react/no-unknown-property": "off",
+    "react/jsx-key": "warn",
+    "react-hooks/exhaustive-deps": "warn",
+    "no-unused-vars": "warn",
+    "react-refresh/only-export-components": "warn"
+  },
+  "env": {
+    "browser": true,
+    "es2020": true
+  },
+  "settings": {
+    "react": {
+      "version": "18.3"
+    }
+  }
+}
