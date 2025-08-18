@@ -120,16 +120,10 @@ export const login = async (req, res, next) => {
 
     res.cookie("jwt", token, {
       maxAge: age,
-      secure: false,
+      secure: true,
       httpOnly: true,
       sameSite: "lax",
     });
-
-    // res.cookie("jwt", token, {
-    //         maxAge: age,
-    //         secure: false,
-    //         sameSite: 'None',
-    //     })
 
     return res.status(200).json({
       success: true,
