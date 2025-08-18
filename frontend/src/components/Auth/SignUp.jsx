@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import { useState } from 'react'
 import { apiClient } from '../../lib/apiClient.js'
 import { SIGNUP_ROUTE } from '../../utils/constants.js'
 import { Link, useNavigate } from 'react-router-dom'

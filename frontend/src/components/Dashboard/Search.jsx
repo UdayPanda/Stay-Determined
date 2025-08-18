@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import { apiClient } from "../../lib/apiClient";
 import { SEARCH_ROUTE } from "../../utils/constants";
+import { useNavigate } from "react-router-dom";
 
 function Search() {
   const [searchTerm, setSearchTerm] = useState("");
@@ -12,6 +13,7 @@ function Search() {
     expanses: [],
   });
   const [mergedArray, setMergedArray] = useState([]);
+  const navigate = useNavigate();
 
   useEffect(() => {
     const handler = setTimeout(() => {
@@ -42,7 +44,6 @@ function Search() {
     try {
       const results = await apiClient.get(SEARCH_ROUTE, {
         params: { query: q },
-        headers: { "Content-Type": "application/json" },
         withCredentials: true,
       });
       setSearchResults(results.data);
@@ -50,6 +51,7 @@ function Search() {
       console.error("Error fetching search results:", error);
       setSearchResults([]);
       setIsSearching(false);
+      navigate("/login");
     }
   };
 
@@ -58,7 +60,7 @@ function Search() {
       <input
         type="text"
         placeholder="Search..."
-        className="bg-gray-200 p-2 rounded-md outline-none w-[300px] max-w-md"
+        className="bg-gray-200 px-4 py-1 rounded-2xl outline-none w-[300px] max-w-md"
         onChange={(e) => setSearchTerm(e.target.value)}
         value={searchTerm}
       />

@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { Link, NavLink } from "react-router-dom";
 import { useAuth } from "../../contexts/AuthContext.jsx";
 import logo from "../../assets/Stay-determined-logo.png";

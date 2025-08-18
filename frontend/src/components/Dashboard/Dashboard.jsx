@@ -1,11 +1,10 @@
-import React, { useState } from "react";
+import { useState } from "react";
 import Navbar from "./Navbar";
 import Home from "./TodoGraph";
 import AllTodos from "./AllTodos";
 import AddTodo from "./AddTodo";
 import "../../App.css";
 import VitaminM from "./VitaminM";
-import Page from "./Page";
 import Search from "./Search";
 
 function Dashboard() {
@@ -26,8 +25,6 @@ function Dashboard() {
         return <AddTodo />;
       case "vitaminm":
         return <VitaminM />;
-      case "Page":
-        return <Page />;
       default:
         return <Home />;
     }
@@ -69,13 +66,7 @@ function Dashboard() {
                 onClick={() => setStateDisplay("vitaminm")}
               >
                 VitaminM
-              </li>
-              <li
-                className="cursor-pointer p-2 rounded-md hover:bg-slate-300"
-                onClick={() => setStateDisplay("Page")}
-              >
-                Page
-              </li>
+              </li>             
             </ul>
           </nav>
         </div>

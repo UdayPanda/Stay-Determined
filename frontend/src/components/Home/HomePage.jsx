@@ -175,7 +175,7 @@ export default function ProductivityLanding() {
                   <div className="space-y-6">
                     <div className="flex items-center justify-between">
                       <h3 className="text-lg font-semibold text-[#2C2627]">
-                        Today's Focus
+                        Today&apos;s Focus
                       </h3>
                       <Badge className="bg-[#FF745C]/10 text-[#FF745C]">
                         85% Complete

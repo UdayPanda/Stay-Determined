@@ -1,4 +1,4 @@
-import React from "react";
+
 // import { Zap } from "lucide-react";
 import { Link } from "react-router-dom";
 import logo from "../../assets/Stay-determined-logo.png";

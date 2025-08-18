@@ -118,18 +118,18 @@ export const login = async (req, res, next) => {
       user.image
     );
 
-    // res.cookie("jwt", token, {
-    //   maxAge: age,
-    //   secure: process.env.NODE_ENV === "production",
-    //   httpOnly: false,
-    //   sameSite: process.env.NODE_ENV === "production" ? "None" : "Lax",
-    // });
-
     res.cookie("jwt", token, {
-            maxAge: age,
-            secure: false,
-            sameSite: 'None',
-        })
+      maxAge: age,
+      secure: false,
+      httpOnly: true,
+      sameSite: "lax",
+    });
+
+    // res.cookie("jwt", token, {
+    //         maxAge: age,
+    //         secure: false,
+    //         sameSite: 'None',
+    //     })
 
     return res.status(200).json({
       success: true,
@@ -198,7 +198,15 @@ export const googleLogin = async (req, res, next) => {
         image: picture,
         password: sub,
       });
-      const token = await createToken(newUser.phone, newUser._id, newUser.name);
+      const token = await createToken(
+        newUser.phone || "",
+        newUser._id,
+        newUser.name,
+        newUser.email,
+        newUser.createdAt,
+        newUser.isAdmin,
+        newUser.image
+      );
       res.cookie("jwt", token, {
         maxAge: age,
         secure: true,

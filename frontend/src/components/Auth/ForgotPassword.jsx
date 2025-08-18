@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import { useState } from "react";
 import Loader from "../Templates/Loader";
 import { RecaptchaVerifier, signInWithPhoneNumber } from "firebase/auth";
 import { auth } from "../../lib/firebase";
@@ -43,7 +43,7 @@ function ForgotPassword() {
         "recaptcha-container",
         {
           size: "invisible",
-          callback: (response) => {
+          callback: () => {
             console.log("reCAPTCHA verified");
           },
         },

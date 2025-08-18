@@ -70,7 +70,7 @@ function Login() {
           localStorage.setItem("token", token);
         }
 
-        login(response.data); 
+        login(response.data.user, response.data.token); 
         showToast("Logged in successfully", "success");
 
         navigate("/dashboard");
@@ -157,7 +157,7 @@ function Login() {
             </button>
 
             <p className="text-center">
-              Don't have an account?{" "}
+              Don&apos;t have an account?{" "}
               <Link to="/signup" className="text-orange-700 italic">
                 Register
               </Link>
@@ -175,7 +175,7 @@ function Login() {
                     });
 
                     localStorage.setItem("token", response.data.token);
-                    login(response.data); // From context
+                    login(response.data.user, response.data.token); // From context
                     navigate("/dashboard");
                     showToast("Logged in via Google", "success");
                     setLoading(false);
