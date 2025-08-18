@@ -64,7 +64,10 @@ function AllTodos({ label }) {
       if (todoLabel && todoLabel > 0) {
         todosFilterByLabelProvidedInProp(response.data.todos);
         setLoading(false);
-      } else setTodos(response.data.todos);
+      } else {
+        setTodos(response.data.todos);
+        setLoading(false);
+      }
     } catch (error) {
       let errorMessage = "Something went wrong.";
       if (error.response) {
