@@ -5,6 +5,7 @@ import { apiClient } from "../../lib/apiClient";
 import { DELETE_TODO, GET_TODOS, UPDATE_TODO } from "../../utils/constants";
 import Toast from "../Templates/Toast";
 import Loader from "../Templates/Loader";
+import Prompt from "../Templates/Prompt";
 
 function AllTodos({ label }) {
   const [todos, setTodos] = useState([]);
@@ -33,6 +34,27 @@ function AllTodos({ label }) {
     4: "Other",
   };
   const [loading, setLoading] = useState(false);
+
+  const [showPrompt, setShowPrompt] = useState(false);
+const [promptTodoId, setPromptTodoId] = useState(null);
+
+const handlePromptOpen = (todoId) => {
+  setPromptTodoId(todoId);
+  setShowPrompt(true);
+};
+
+const handleConfirm = () => {
+  if (promptTodoId) {
+    removeTodo(promptTodoId);
+  }
+  setShowPrompt(false);
+  setPromptTodoId(null);
+};
+
+const handleCancel = () => {
+  setShowPrompt(false);
+  setPromptTodoId(null);
+};
 
   const showToast = (message, type) => {
     setToast({ show: true, message, type });
@@ -201,7 +223,7 @@ function AllTodos({ label }) {
 
       {loading ? <Loader /> : <div></div>}
 
-      <TodoProvider value={{ todos, updateTodo, toggleComplete, removeTodo }}>
+      <TodoProvider value={{ todos, updateTodo, toggleComplete, handlePromptOpen }}>
         <div className="flex flex-wrap gap-y-3 w-[80%] lg:w-[60%] mx-auto mt-8">
           {todos.map((todo) => (
             <div className="w-full" key={todo._id}>
@@ -210,6 +232,14 @@ function AllTodos({ label }) {
           ))}
         </div>
       </TodoProvider>
+
+      <Prompt
+        isOpen={showPrompt}
+        title="Delete Confirmation"
+        message="Are you sure you want to delete this item?"
+        onConfirm={handleConfirm}
+        onCancel={handleCancel}
+      />
 
       {toast.show && (
         <Toast

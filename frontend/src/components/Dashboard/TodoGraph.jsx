@@ -365,7 +365,7 @@ function TodoGraph() {
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-8">
               {notes.map((note, index) => (
                 <div
-                  key={note._id}
+                  key={note.id}
                   className="bg-white rounded-lg shadow-md hover:shadow-lg transition-shadow duration-200 p-1"
                 >
                   <div className="relative">

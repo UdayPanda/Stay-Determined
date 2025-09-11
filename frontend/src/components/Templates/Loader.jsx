@@ -1,9 +1,15 @@
-
+import LoadingImage from '../../assets/image.png'
 
 function Loader() {
   return (
     <>
-    <div className='absolute top-[35%] left[35%] h-[100vh] text-2xl font-bold color-white'>Loading....</div>
+    <div className="fixed inset-0 flex items-center justify-center bg-[#1919198e] bg-opacity-70 backdrop-blur-sm z-50">
+      <img
+        src={LoadingImage} 
+        alt="Loading"
+        className="w-48 animate-pulse rounded-xl bg-cover bg-center"
+      />
+    </div>
     </>
     
   )

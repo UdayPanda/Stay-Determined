@@ -1,80 +1,17 @@
-import { useEffect, useState } from "react";
-import { GET_EXPANSE } from "../../utils/constants.js";
-import { useAuth } from "../../contexts/index.js";
-import { apiClient } from "../../lib/apiClient.js";
+import { useEffect } from "react";
 import { useExpanse } from "../../contexts/ExpanseContext.jsx";
 
-function Debit({ onError }) {
-  const { user } = useAuth();
-  const userID = user?.user?.id || user?.id;
-  const { expanses, setExpanses, balance } = useExpanse();
-  const [loader, setLoader] = useState(false);
-  // const [selectedTransaction, setSelectedTransaction] = useState(null)
-
-  const fetchTransaction = async (userID) => {
-    setLoader(true);
-    try {
-      const response = await apiClient.post(
-        GET_EXPANSE,
-        { user: userID },
-        { headers: { "Content-Type": "application/json" } }
-      );
-
-      const data = response.data.expanse;
-
-      setExpanses(data);
-    } catch (error) {
-      let errorMessage = "Transactions failed to fetch.";
-      if (error.response) {
-        errorMessage =
-          error.response.data.message ||
-          error.response.data.error ||
-          errorMessage;
-      }
-      onError(errorMessage, "error");
-    } finally {
-      setLoader(false);
-    }
-  };
-
-  // const handleDelete = async (id) => {
-  //   try {
-
-  //     await apiClient.delete(DELETE_EXPANSE, { user: userID, id }, { headers: { 'Content-Type': 'application/json' } })
-  //     setExpanses(prev => prev.filter((expanse) => expanse.id !== id))
-  //     setSelectedTransaction(null)
-
-  //   } catch (error) {
-  //     let errorMessage = "Transactions failed to delete.";
-  //     if (error.response) {
-  //       errorMessage = error.response.data.message || error.response.data.error || errorMessage;
-  //     }
-  //     onError(errorMessage, 'error');
-  //   }
-  // }
+function Debit({ dateRange }) {
+  const { expanses, setDateRange, balance } = useExpanse();
 
   useEffect(() => {
-    if (userID) {
-      fetchTransaction(userID);
-    }
-  }, [user, balance]);
-
-  if (loader) {
-    return (
-      <div className="rounded-md h-80 m-4">
-        <div className="flex flex-col items-center gap-2 w-48 mr-2 text-gray-700 overflow-y-scroll scrollbar-none">
-          <div className="mt-1 font-semibold">Debit</div>
-          <h1>Loading...</h1>
-        </div>
-      </div>
-    );
-  }
+    setDateRange(dateRange);
+  }, [dateRange]);
 
   return (
     <>
       <div className="lg:col-span-1 border border-slate-700/50 overflow-hidden shadow-xl hover:shadow-2xl transition-all duration-300">
         <div className="px-4 border-b border-slate-700/50">
-          
           {expanses &&
             Object.entries(
               expanses.reduce((groupedTransactions, item) => {
@@ -90,20 +27,23 @@ function Debit({ onError }) {
 
                 return groupedTransactions;
               }, {})
-            ).map(([date, transactions]) => (
-              <div key={date} className="relative w-full">
-                <h3 className="text-white text-xs text-center">{date}</h3>
+            ).map(([date, transactions]) => {
+              // Filter only debit transactions for this date
+              const creditTransactions = transactions.filter(
+                (item) => item.debit === true
+              );
+              if (creditTransactions.length === 0) return null;
 
-                {transactions
-                  .filter((item) => item.debit === true)
-                  .map((item) => (
+              return (
+                <div key={date} className="relative w-full">
+                  <h3 className="text-white text-xs text-center">{date}</h3>
+                  {creditTransactions.map((item) => (
                     <div
-                      key={item.id}
+                      key={item._id}
                       className="relative p-1 w-full h-12 rounded-md shadow-md bg-red-100 m-1.5"
-                      // onClick={() => setSelectedTransaction(item.id)}
                     >
                       <div className="text-gray-700 text-xs">{item.party}</div>
-                      <div className="absolute top-1 right-3 text-red-700 text-xs">
+                      <div className="absolute top-1 right-3 text-red-600 text-xs">
                         -{item.amount}
                       </div>
                       <div className="absolute top-8 right-3 text-gray-700 text-[10px]">
@@ -118,34 +58,13 @@ function Debit({ onError }) {
                           {item.description}
                         </p>
                       </div>
-                      {/* {selectedTransaction === item.id && (
-                    <Dialog open={selectedTransaction === item.id} onOpenChange={() => setSelectedTransaction(null)}>
-                      <DialogTrigger className='absolute top-2 left-2 bg-red-600 text-white text-xs rounded-md p-1'>
-                        Delete
-                      </DialogTrigger>
-                      <DialogContent>
-                        <div className='p-4'>
-                          <p>Are you sure you want to delete this transaction?</p>
-                          <button
-                            onClick={() => handleDelete(item.id)}
-                            className='bg-red-600 text-white rounded p-2 mt-4'
-                          >
-                            Confirm
-                          </button>
-                          <DialogClose asChild>
-                            <button className='bg-gray-300 rounded p-2 mt-4'>Cancel</button>
-                          </DialogClose>
-                        </div>
-                      </DialogContent>
-                    </Dialog>
-                  )} */}
                     </div>
                   ))}
-              </div>
-            ))}
+                </div>
+              );
+            })}
         </div>
       </div>
-      
     </>
   );
 }

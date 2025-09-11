@@ -1,19 +1,10 @@
-const Prompt = ({ 
-  title = "Are you sure?", 
-  message = "Do you want to proceed?", 
-  onConfirm, 
-  onCancel, 
-  isOpen 
-}) => {
+
+const Prompt = ({ title = "Are you sure?", message = "Do you want to proceed?", onConfirm, onCancel, isOpen }) => {
   if (!isOpen) return null;
 
   return (
-    <div 
-      className="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center z-50"
-    >
-      <div 
-        className="bg-white p-6 rounded-md shadow-md w-80"
-      >
+    <div className="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center z-50">
+      <div className="bg-white p-6 rounded-md shadow-md w-80">
         <h3 className="text-lg font-semibold text-gray-800 mb-2">{title}</h3>
         <p className="text-gray-600 mb-4">{message}</p>
         <div className="flex justify-end space-x-3">

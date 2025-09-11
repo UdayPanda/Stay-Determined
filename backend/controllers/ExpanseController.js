@@ -13,7 +13,7 @@ export const addExpanse = async (req, res) => {
             })
         }
 
-        const notUniqueTransaction = await Expanse.findOne({ user, date, party });
+        const notUniqueTransaction = await Expanse.findOne({ user, date, party, amount });
         
         if(notUniqueTransaction != null){
             return res.status(400).json({
@@ -69,7 +69,7 @@ export const addExpanse = async (req, res) => {
 export const getExpanse = async (req, res) => {
     try {
         
-        const { user } = req.body
+        const { user, startDate, endDate } = req.body
 
         if (!user) {
             return res.status(400).json({
@@ -78,7 +78,14 @@ export const getExpanse = async (req, res) => {
             })
         }
 
-        const expanse = await Expanse.find({ user }).sort({ date: -1 })
+        // const expanse = await Expanse.find({ user }).sort({ date: -1 })
+        const expanse = await Expanse.find({ 
+            user,
+            date: {
+                $gte: startDate,
+                $lte: endDate
+            }
+        }).sort({ date: -1 });
 
         res.status(200).json({
             success: true,
@@ -98,7 +105,7 @@ export const getExpanse = async (req, res) => {
 export const getBalance = async (req, res) => {
     try {
         
-        const { user } = req.body
+        const { user, startDate, endDate } = req.body
 
         if (!user) {
             return res.status(400).json({
@@ -107,9 +114,16 @@ export const getBalance = async (req, res) => {
             })
         }
 
-        const expanse = await Expanse.findOne({ user }).sort({ date: -1 })
+        // const expanse = await Expanse.findOne({ user }).sort({ date: -1 })
+        const expanse = await Expanse.findOne({ 
+            user,
+            date: {
+                $gte: startDate,
+                $lte: endDate
+            }
+        }).sort({ date: -1 });
         const balance = expanse ? expanse.balance : 0
-
+        
         res.status(200).json({
             success: true,
             message: "Expanse fetched successfully",

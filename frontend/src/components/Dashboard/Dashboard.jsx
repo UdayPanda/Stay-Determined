@@ -1,11 +1,13 @@
 import { useState } from "react";
+import "../../App.css"
 import Navbar from "./Navbar";
-import Home from "./TodoGraph";
+import TodoGraph from "./TodoGraph";
 import AllTodos from "./AllTodos";
 import AddTodo from "./AddTodo";
-import "../../App.css";
 import VitaminM from "./VitaminM";
 import Search from "./Search";
+import { ExpanseProvider } from "../../contexts/ExpanseContext";
+import Premium from "./Premium";
 
 function Dashboard() {
   const [isOpen, setIsOpen] = useState(false);
@@ -18,15 +20,22 @@ function Dashboard() {
   const renderContent = () => {
     switch (stateDisplay) {
       case "dashboard":
-        return <Home />;
+        return  <TodoGraph />;
       case "allTodos":
         return <AllTodos />;
       case "addTodo":
         return <AddTodo />;
       case "vitaminm":
-        return <VitaminM />;
+        return (
+          <ExpanseProvider>
+            <VitaminM />
+          </ExpanseProvider>
+        );
+
+      case "premium":
+        return <Premium />;
       default:
-        return <Home />;
+        return <TodoGraph />;
     }
   };
 
@@ -66,12 +75,20 @@ function Dashboard() {
                 onClick={() => setStateDisplay("vitaminm")}
               >
                 VitaminM
-              </li>             
+              </li>
+              <li
+                className="cursor-pointer p-2 rounded-md hover:bg-slate-300"
+                onClick={() => setStateDisplay("premium")}
+              >
+                Premium
+              </li>
             </ul>
           </nav>
         </div>
       </div>
-      <div className={`pt-24 font-poppins min-h-screen bg-gradient-to-br from-slate-900 via-blue-900 to-slate-800 py-8`}>
+      <div
+        className={`pt-24 font-poppins min-h-screen bg-gradient-to-br from-slate-900 via-blue-900 to-slate-800 py-8`}
+      >
         {renderContent()}
       </div>
     </>

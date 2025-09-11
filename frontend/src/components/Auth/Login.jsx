@@ -65,12 +65,12 @@ function Login() {
           }
         );
 
-        const token = response.data.token; 
+        const token = response.data.token;
         if (token) {
           localStorage.setItem("token", token);
         }
 
-        login(response.data.user, response.data.token); 
+        login(response.data.user, response.data.token);
         showToast("Logged in successfully", "success");
 
         navigate("/dashboard");
@@ -108,7 +108,6 @@ function Login() {
                 id="phone"
                 maxLength={10}
                 value={phone}
-                maxLength={10}
                 onChange={(e) => setPhone(e.target.value)}
                 required
               />
@@ -151,12 +150,11 @@ function Login() {
               </Link>
             </p>
             <button
-              className="bg-orange-700 text-white p-1 px-2 rounded-md w-1/3 m-auto"
+              className="flex items-center justify-center bg-orange-700 text-white p-1 px-2 rounded-md w-1/3 m-auto"
               type="submit"
             >
-              Login
-            </button>
-
+              {loading ? <div className="w-6 h-6 border-4 border-white border-t-transparent rounded-full animate-spin"></div> : "Login"}
+            </button>    
             <p className="text-center">
               Don&apos;t have an account?{" "}
               <Link to="/signup" className="text-orange-700 italic">

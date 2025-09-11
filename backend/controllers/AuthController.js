@@ -136,6 +136,7 @@ export const login = async (req, res, next) => {
         email: user.email,
         name: user.name,
         Image: user.image,
+        createdAt: user.createdAt,
       },
     });
   } catch (error) {

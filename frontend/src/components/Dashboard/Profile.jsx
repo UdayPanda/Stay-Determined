@@ -59,7 +59,7 @@ function Profile() {
             </div>
             <div>
               <h4 className="font-medium text-gray-600">Role</h4>
-              <p className="text-gray-800">Frontend Developer</p>
+              <p className="text-gray-800">{user.isAdmin ?? user.user.isAdmin ? "Admin" : "User"}</p>
             </div>
           </div>
         </div>

@@ -10,8 +10,8 @@
     "mongoose": "^8.5.3",
     "nodemon": "^3.1.4"
   },
-  "name": "y",
-  "version": "1.0.0",
+  "name": "backend",
+  "version": "1.1.1",
   "main": "server.js",
   "scripts": {
     "start": "node server.js",

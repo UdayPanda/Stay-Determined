@@ -101,6 +101,7 @@ function SignUp() {
 
             }
         }
+        setLoading(false)
     }
 
     return (
@@ -132,7 +133,6 @@ function SignUp() {
                                 id='phone'
                                 maxLength={10}
                                 value={phone}
-                                maxLength={10}
                                 onChange={(e) => setPhone(e.target.value)}
                                 required />
                         </div>

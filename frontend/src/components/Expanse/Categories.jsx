@@ -1,54 +1,12 @@
 import { useEffect } from "react";
-import { useAuth } from "../../contexts";
-import { GET_EXPANSE } from "../../utils/constants";
-import { apiClient } from "../../lib/apiClient";
 import { useExpanse } from "../../contexts/ExpanseContext";
 
-function Categories(onError) {
-  const { user } = useAuth();
-  const { expanses, setExpanses, balance } = useExpanse();
-
-  const fetchTransaction = async (userID) => {
-    try {
-      const response = await apiClient.post(
-        GET_EXPANSE,
-        { user: userID },
-        { headers: { "Content-Type": "application/json" } }
-      );
-
-      const data = response.data.expanse;
-
-      setExpanses(data);
-    } catch (error) {
-      let errorMessage = "Categories failed to fetch.";
-      if (error.response) {
-        errorMessage =
-          error.response.data.message ||
-          error.response.data.error ||
-          errorMessage;
-      }
-      onError(errorMessage, "error");
-    }
-  };
+function Categories(dateRange) {
+  const { expanses, setDateRange } = useExpanse();
 
   useEffect(() => {
-    const userID = user?.user?.id || user?.id;
-
-    if (userID) {
-      fetchTransaction(userID);
-    }
-  }, [user, balance]);
-
-  if (!expanses) {
-    return (
-      <div className="rounded-md h-80 m-4">
-        <div className="flex flex-col items-center gap-2 w-48 mr-2 text-gray-700 overflow-y-scroll scrollbar-none">
-          <div className="mt-1 font-semibold">Payments</div>
-          <h1>Loading...</h1>
-        </div>
-      </div>
-    );
-  }
+    setDateRange(dateRange);
+  },[dateRange])
 
   return (
     <div className="rounded-md m-4">
@@ -58,13 +16,13 @@ function Categories(onError) {
           expanses
             .filter((item) => item.category === "loan")
             .map((item) => (
-              <div key={expanses.category} className="mb-6">
+              <div key={item._id} className="mb-6">
                 <h2 className="text-white font-semibold mb-2 capitalize">
                   {expanses.category}
                 </h2>
                 <div className="space-y-2">
                   <div
-                    key={item.id}
+                    key={item._id}
                     className={`relative p-2 w-full rounded-md shadow-md ${
                       item.debit ? "bg-red-100" : "bg-green-100"
                     }`}

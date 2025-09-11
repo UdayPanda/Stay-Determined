@@ -1,5 +1,4 @@
 import mongoose from "mongoose";
-// import { genSalt, hash } from "bcrypt";
 import bcrypt from "bcryptjs";
 
 
@@ -35,17 +34,6 @@ const userSchema = new mongoose.Schema({
         default: Date.now
     }
 })
-
-
-// userSchema.pre("save", async function(next) {
-//     if(!this.isModified("password")) {  
-//         return next();
-//     }
-//     const salt = await genSalt(10);
-//     const hashing = await hash(this.password, salt);
-//     this.password = hashing;
-//     next();
-// })
 
 userSchema.pre("save", async function(next) {
     if (!this.isModified("password")) {  

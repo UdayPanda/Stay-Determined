@@ -1,13 +1,14 @@
 import { useEffect, useState } from "react";
-import { useAuth } from "../../contexts";
+import { useAuth, useTodo } from "../../contexts";
 import { apiClient } from "../../lib/apiClient";
-import { ADD_EXPANSE, GET_BALANCE } from "../../utils/constants";
+import { ADD_EXPANSE } from "../../utils/constants";
 import { useExpanse } from "../../contexts/ExpanseContext.jsx";
 
-function ExpanseForm({ onError }) {
+function ExpanseForm({ onError, dateRange }) {
+  const { balance, setDateRange, refreshExpanses } = useExpanse();
   const { user } = useAuth();
   const userID = user?.user?.id || user?.id;
-  const { balance, setBalance } = useExpanse();
+  const { todos, fetchTodos, error } = useTodo();
   const [party, setParty] = useState("");
   const [description, setDescription] = useState("");
   const [amount, setAmount] = useState(0);
@@ -15,33 +16,11 @@ function ExpanseForm({ onError }) {
   const [loan, setLoan] = useState(false);
   const [todo, setTodo] = useState("");
   const [date, setDate] = useState("");
-//   const [check, setCheck] = useState(true);
-
-  const fetchBalance = async (userID) => {
-    try {
-      const response = await apiClient.post(
-        GET_BALANCE,
-        { user: userID },
-        { headers: { "Content-Type": "application/json" } }
-      );
-      const data = response.data.balance;
-      setBalance(data);
-    } catch (error) {
-      let errorMessage = "Transactions failed to fetch.";
-      if (error.response) {
-        errorMessage =
-          error.response.data.message ||
-          error.response.data.error ||
-          errorMessage;
-      }
-      onError(errorMessage, "error");
-    }
-  };
 
   const handleSave = async () => {
     try {
       const requestBody = {
-        user: user?.user?.id || user?.id,
+        user: userID,
         party: party,
         description: description,
         amount: amount,
@@ -58,8 +37,10 @@ function ExpanseForm({ onError }) {
       await apiClient.post(ADD_EXPANSE, requestBody, {
         headers: { "Content-Type": "application/json" },
       });
-      fetchBalance(userID);
 
+      onError("Transaction saved successfully.", "success");
+      
+      refreshExpanses({ start: dateRange.start, end: dateRange.end });
       setParty("");
       setDescription("");
       setAmount(0);
@@ -68,113 +49,29 @@ function ExpanseForm({ onError }) {
       setTodo("");
       setDate("");
     } catch (error) {
-      let errorMessage = "Transactions failed to fetch.";
-      if (error.response) {
-        errorMessage =
-          error.response.data.message ||
-          error.response.data.error ||
-          errorMessage;
-      }
-      onError(errorMessage, "error");
+      onError(
+        error.response?.data?.message || "Transaction failed to save.",
+        "error"
+      );
     }
   };
 
   useEffect(() => {
-    if (userID) {
-      fetchBalance(userID);
-    }
-  }, [user, balance]);
+  if (userID && dateRange?.end) {
+    fetchTodos(userID, dateRange.end);
+    console.log(todos);    
+  }
+  if (error) {
+    onError(error, "error");
+  }
+}, [userID, dateRange, error]);
+
+
+  useEffect(() => {
+    setDateRange(dateRange);
+  }, [dateRange]);
 
   return (
-    // <div className='fixed w-[90%] ml-4 lg:ml-0 bottom-6 flex flex-col lg:flex-row gap-2 items-center justify-between bg-slate-400 rounded-md p-4'>
-    //     <div className='text-gray-700 font-semibold text-lg'>Balance : {balance}</div>
-
-    //     <button
-    //         className={`block lg:hidden bg-sky-500 px-3 rounded-md text-sm text-white`}
-    //         onClick={()=> setCheck((prev)=> !prev)}
-    //     >{check ? "Add New" : "Cancel"}</button>
-
-    //     <div className={`${check ? "hidden" : "block"} lg:block justify-between w-full lg:w-[600px] grid gap-2 grid-cols-1 lg:grid-cols-2 text-sm`}>
-    //         <div className='flex items-start justify-between'>
-    //             <label htmlFor="party">Party: </label>
-    //             <input
-    //                 type="text"
-    //                 className='text-gray-700 px-1 rounded-md outline-none mx-2 w-full'
-    //                 required
-    //                 value={party}
-    //                 onChange={(e) => setParty(e.target.value)}
-    //             />
-    //         </div>
-    //         <div className='flex items-start justify-between'>
-    //             <label htmlFor="party">Description: </label>
-    //             <input
-    //                 type="text"
-    //                 className='text-gray-700 px-1 rounded-md outline-none mx-2 w-full'
-    //                 required
-    //                 value={description}
-    //                 onChange={(e) => setDescription(e.target.value)}
-    //             />
-    //         </div>
-    //         <div className='flex items-start justify-between'>
-    //             <label htmlFor="party">Amount: </label>
-    //             <input
-    //                 type="text"
-    //                 className='text-gray-700 px-1 rounded-md outline-none mx-2 w-full'
-    //                 required
-    //                 value={amount}
-    //                 onChange={(e) => setAmount(e.target.value)}
-    //             />
-    //         </div>
-    //         <div className='flex items-start justify-between'>
-    //             <label htmlFor="party">Task: </label>
-    //             <input
-    //                 type="text"
-    //                 className='text-gray-700 px-1 rounded-md outline-none mx-2 w-full'
-    //                 value={todo}
-    //                 onChange={(e) => setTodo(e.target.value)}
-    //             />
-    //         </div>
-    //         <div className='flex items-start justify-between'>
-    //             <label htmlFor="party">Loan: </label>
-
-    //             <label className="inline-flex items-center mb-5 cursor-pointer outline-none mr-52">
-    //                 <input
-    //                     type="checkbox" value=""
-    //                     className="sr-only peer"
-    //                     checked={loan}
-    //                     onChange={() => setLoan(!loan)}
-    //                 />
-    //                 <div
-    //                     className="relative w-7 h-4 bg-gray-200 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-blue-300 dark:ring-blue-800 rounded-full peer dark:bg-gray-700 peer-checked:after:translate-x-full rtl:peer-checked:after:-translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:start-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-3 after:w-3 after:transition-all dark:border-gray-600 peer-checked:bg-blue-600"></div>
-    //             </label>
-
-    //         </div>
-    //         <div className='flex items-start justify-between'>
-    //             <label htmlFor="party">Type: </label>
-    //             <select
-    //                 name="category"
-    //                 id="category"
-    //                 value={category}
-    //                 onChange={(e) => setCategory(e.target.value)}
-    //                 className='w-36 text-center bg-white rounded-md'
-    //             >
-    //                 <option value="">Select</option>
-    //                 <option value="debit">Debit</option>
-    //                 <option value="credit">Credit</option>
-    //             </select>
-    //         </div>
-
-    //     </div>
-
-    //     <div>
-    //         <button
-    //             type='submit'
-    //             className={`${check ? "hidden" : "block"} lg:block bg-green-500 px-3 rounded-md text-sm text-white`}
-    //             onClick={handleSave}
-    //         >Save</button>
-    //     </div>
-    // </div>
-
     <div className="bg-white/10 backdrop-blur-md rounded-xl border border-slate-700/50 p-6 shadow-xl">
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-8 items-end">
         {/* Balance Display */}
@@ -225,13 +122,21 @@ function ExpanseForm({ onError }) {
                 <label className="block text-slate-400 text-sm mb-2 font-medium">
                   Task:
                 </label>
-                <input
-                  type="text"
+                <select
                   value={todo}
                   onChange={(e) => setTodo(e.target.value)}
                   className="w-full bg-slate-800/50 border border-slate-600 rounded-lg px-4 py-3 text-white placeholder-slate-500 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all"
-                  placeholder="Task description"
-                />
+                >
+                  <option value="">Select Task (Optional)</option>
+                  {todos
+                    ?.filter((task) => task.expanse === true)
+                    .map((task) => (
+                    <option key={task._id} value={task._id}>
+                      {task.title}
+                    </option>
+                  ))}
+
+                </select>
               </div>
             </div>
 
@@ -261,7 +166,7 @@ function ExpanseForm({ onError }) {
                     onChange={() => setLoan(!loan)}
                     className="sr-only peer"
                   />
-                  <div className="relative w-10 h-5 bg-gray-200 rounded-full peer peer-checked:bg-blue-600 transition-all">
+                  <div className="relative w-10 h-5 bg-orange-500 rounded-full peer peer-checked:bg-blue-600 transition-all">
                     <div className="absolute top-[2px] left-[2px] bg-white w-4 h-4 rounded-full transition-all peer-checked:translate-x-5"></div>
                   </div>
                   <span className="ml-3 text-slate-400 text-sm">
