@@ -24,7 +24,6 @@ function ForgotPassword() {
     );
   };
 
-
   const handleVerify = async (phoneNumber) => {
     if (
       phoneNumber.length !== 10 ||
@@ -39,18 +38,18 @@ function ForgotPassword() {
     } else {
       phoneNumber = "+91" + phoneNumber;
       if (!window.recaptchaVerifier) {
-      window.recaptchaVerifier = new RecaptchaVerifier(
-        "recaptcha-container",
-        {
-          size: "invisible",
-          callback: () => {
-            console.log("reCAPTCHA verified");
-          },
-        },
-        auth
-      );
-      await window.recaptchaVerifier.render();
-    }
+        window.recaptchaVerifier = new RecaptchaVerifier(
+          auth,
+          "recaptcha-container",
+          {
+            size: "invisible",
+            callback: () => {
+              console.log("reCAPTCHA verified");
+            },
+          }
+        );
+        await window.recaptchaVerifier.render();
+      }
       try {
         setLoading(true);
         const confirmation = await signInWithPhoneNumber(
@@ -63,16 +62,13 @@ function ForgotPassword() {
         setLoading(false);
         showToast("OTP sent successfully", "success");
       } catch (error) {
-        let errorMessage =
-          "An error occurred during phone number verification.";
-        if (error.response) {
-          errorMessage =
-            error.response.data.message ||
-            error.response.data.error ||
-            errorMessage;
-        }
+        showToast(
+          error.response?.data?.message ||
+            error.message ||
+            "An error occurred during phone number verification.",
+          "error"
+        );
         setLoading(false);
-        showToast(errorMessage, "error");
       }
     }
   };
@@ -94,15 +90,13 @@ function ForgotPassword() {
       setLoading(false);
       navigate("/login");
     } catch (error) {
-      let errorMessage = "An error occurred during account login.";
-      if (error.response) {
-        errorMessage =
-          error.response.data.message ||
-          error.response.data.error ||
-          errorMessage;
-      }
+      showToast(
+        error.response?.data?.message ||
+          error.message ||
+          "An error occurred during account login.",
+        "error"
+      );
       setLoading(false);
-      showToast(errorMessage, "error");
     }
   };
 
@@ -149,10 +143,14 @@ function ForgotPassword() {
             </div>
             <button
               type="button"
-              className="relative left-[90%] w-10 text-orange-700 flex items-center"
+              className=" relative left-[90%] w-10 text-orange-700 flex items-center"
               onClick={() => handleVerify(username)}
             >
-              Verify
+              {loading ? (
+                <span className="w-5 h-5 border-2 border-orange-700 border-t-transparent rounded-full animate-spin"></span>
+              ) : (
+                "Verify"
+              )}
             </button>
           </div>
 
@@ -180,7 +178,7 @@ function ForgotPassword() {
           </button>
         </form>
       </div>
-      {loading ? <Loader /> : <div></div>}
+      {/* {loading ? <Loader /> : <div></div>} */}
       {toast.show && (
         <Toast
           message={toast.message}

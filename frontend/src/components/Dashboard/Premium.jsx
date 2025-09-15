@@ -28,7 +28,7 @@ const Premium = () => {
         contact: "9752928289",
       },
       theme: {
-        color: "#3399cc",
+        color: "#fff",
       },
     };
 

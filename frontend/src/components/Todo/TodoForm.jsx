@@ -146,7 +146,7 @@ function TodoForm(onError) {
           </span>
 
           {/* Quadrant Labels */}
-          <span className="absolute top-2 left-8 text-[#32A3F5] w-[150px] font-bold text-sm text-center p-2 rounded-lg">
+          <span className="absolute top-2 left-2 lg:left-8 text-[#32A3F5] w-[150px] font-bold text-sm text-center p-2 rounded-lg">
             <label
               htmlFor="label-1"
               className="flex text-[12px] items-center gap-2 cursor-pointer hover:bg-blue-100 rounded-lg px-2 py-1 transition"
@@ -166,7 +166,7 @@ function TodoForm(onError) {
             </label>
           </span>
 
-          <span className="absolute right-8 top-2 text-[#32C64A] w-[150px] font-bold text-sm text-center p-2 rounded-lg">
+          <span className="absolute right-0 lg:right-8 top-2 text-[#32C64A] w-[150px] font-bold text-sm text-center p-2 rounded-lg">
             <label
               htmlFor="label-3"
               className="flex text-[12px] items-center gap-2 cursor-pointer hover:bg-green-100 rounded-lg px-2 py-1 transition"
@@ -186,7 +186,7 @@ function TodoForm(onError) {
             </label>
           </span>
 
-          <span className="absolute bottom-0 left-8 text-[#F5BC20] w-[150px] font-bold text-sm text-center p-2 rounded-lg">
+          <span className="absolute bottom-0 left-2 lg:left-8 text-[#F5BC20] w-[150px] font-bold text-sm text-center p-2 rounded-lg">
             <label
               htmlFor="label-4"
               className="flex text-[12px] items-center gap-2 cursor-pointer hover:bg-yellow-100 rounded-lg px-2 py-1 transition"
@@ -206,7 +206,7 @@ function TodoForm(onError) {
             </label>
           </span>
 
-          <span className="absolute bottom-2 right-8 text-[#f52987] w-[150px] font-bold text-sm text-center p-2 rounded-lg">
+          <span className="absolute bottom-3 lg:bottom-2 right-0 lg:right-8 text-[#f52987] w-[150px] font-bold text-sm text-center p-2 rounded-lg">
             <label
               htmlFor="label-2"
               className="flex text-[12px] items-center gap-2 cursor-pointer hover:bg-pink-100 rounded-lg px-2 py-1 transition"

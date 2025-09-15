@@ -26,7 +26,6 @@ export const TodoProvider = ({ children }) => {
         { user: userId, date },
         { headers: { "Content-Type": "application/json" } }
       )
-      console.log(response.data.todos);
       
       setTodos(response.data.todos);
     } catch (err) {
