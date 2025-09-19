@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import Loader from "../Templates/Loader";
 import { RecaptchaVerifier, signInWithPhoneNumber } from "firebase/auth";
 import { auth } from "../../lib/firebase";
@@ -10,9 +10,11 @@ import { FORGOT_PASSWORD_ROUTE } from "../../utils/constants";
 function ForgotPassword() {
   const [username, setUsername] = useState("");
   const [loading, setLoading] = useState(false);
+  const [instance, setInstance] = useState(false);
   const [toast, setToast] = useState({ show: false, message: "", type: "" });
   const [otp, setOtp] = useState("");
   const [password, setPassword] = useState("");
+  const [confirmPassword, setConfirmPassword] = useState("");
   const [otpSent, setOtpSent] = useState(false);
   const navigate = useNavigate();
 
@@ -51,7 +53,7 @@ function ForgotPassword() {
         await window.recaptchaVerifier.render();
       }
       try {
-        setLoading(true);
+        setInstance(true);
         const confirmation = await signInWithPhoneNumber(
           auth,
           phoneNumber,
@@ -68,12 +70,42 @@ function ForgotPassword() {
             "An error occurred during phone number verification.",
           "error"
         );
-        setLoading(false);
+        setInstance(false);
       }
     }
   };
 
+  const validator = (otp, password) => {
+    if (!otp || !password) {
+      showToast("Please enter valid OTP and Password.", "error");
+    }
+    if (otp.length != 6 || isNaN(otp) || otp < 100000) {
+      showToast("Please enter a valid 6-digit OTP.", "error");
+    }
+    if (password.length < 6) {
+      showToast("Password must be at least 6 characters long", "error");
+      return false;
+    }
+
+    if (
+      password &&
+      !/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)[a-zA-Z\d]{6,}$/.test(password)
+    ) {
+      showToast(
+        "Password must contain at least one uppercase letter, one lowercase letter, and one number",
+        "error"
+      );
+      return false;
+    }
+
+    if (password !== confirmPassword) {
+      showToast("Passwords do not match", "error");
+      return false;
+    }
+  };
+
   const handleForgotPassword = async (otp, newPassword) => {
+    validator(otp, newPassword);
     try {
       setLoading(true);
       const result = await window.confirmationResult.confirm(otp);
@@ -99,6 +131,78 @@ function ForgotPassword() {
       setLoading(false);
     }
   };
+
+  //   const initRecaptcha = () => {
+  //   if (!window.recaptchaVerifier) {
+  //     window.recaptchaVerifier = new RecaptchaVerifier(
+  //       "recaptcha-container", // container id
+  //       {
+  //         size: "invisible",
+  //         callback: (response) => {
+  //           console.log("reCAPTCHA solved", response);
+  //         },
+  //       },
+  //       auth // auth must be passed as the third argument here
+  //     );
+  //   }
+  // };
+
+  // const handleVerify = async (phoneNumber) => {
+  //   if (!/^[6-9]\d{9}$/.test(phoneNumber)) {
+  //     showToast("Please enter a valid 10-digit phone number", "error");
+  //     return;
+  //   }
+
+  //   try {
+  //     setLoading(true);
+  //     initRecaptcha();
+  //     const appVerifier = window.recaptchaVerifier;
+
+  //     const confirmation = await signInWithPhoneNumber(
+  //       auth,
+  //       "+91" + phoneNumber,
+  //       appVerifier
+  //     );
+
+  //     window.confirmationResult = confirmation;
+  //     setOtpSent(true);
+  //     showToast("OTP sent successfully", "success");
+  //   } catch (error) {
+  //     showToast(
+  //       error.code === "auth/invalid-app-credential"
+  //         ? "Invalid reCAPTCHA. Please refresh and try again."
+  //         : error.message,
+  //       "error"
+  //     );
+  //   } finally {
+  //     setLoading(false);
+  //   }
+  // };
+
+  // const handleForgotPassword = async (e) => {
+  //   e.preventDefault(); // stop page reload
+  //   try {
+  //     setLoading(true);
+  //     const result = await window.confirmationResult.confirm(otp);
+  //     const verifiedPhone = result.user.phoneNumber;
+
+  //     // delete the temp Firebase user
+  //     await result.user.delete();
+
+  //     // update password in your backend
+  //     await apiClient.post(FORGOT_PASSWORD_ROUTE, {
+  //       phone: verifiedPhone,
+  //       password,
+  //     });
+
+  //     showToast("Password reset successfully", "success");
+  //     navigate("/login");
+  //   } catch (error) {
+  //     showToast(error.message, "error");
+  //   } finally {
+  //     setLoading(false);
+  //   }
+  // };
 
   return (
     <div className="absolute text-gray-600 inset-0 bg-black bg-opacity-15 backdrop-blur-md flex items-center justify-center">
@@ -146,7 +250,7 @@ function ForgotPassword() {
               className=" relative left-[90%] w-10 text-orange-700 flex items-center"
               onClick={() => handleVerify(username)}
             >
-              {loading ? (
+              {instance ? (
                 <span className="w-5 h-5 border-2 border-orange-700 border-t-transparent rounded-full animate-spin"></span>
               ) : (
                 "Verify"
@@ -170,6 +274,22 @@ function ForgotPassword() {
             />
           </div>
 
+          <div className="flex flex-col gap-1">
+            <label htmlFor="password">
+              Confirm New Password
+              <span className="text-red-500">*</span>
+            </label>
+            <input
+              className="bg-gray-200 p-1 px-2 rounded-md outline-none"
+              type="text"
+              id="confirmpassword"
+              value={confirmPassword}
+              onChange={(e) => setConfirmPassword(e.target.value)}
+              placeholder="Confirm your new password"
+              required
+            />
+          </div>
+
           <button
             type="submit"
             className="bg-orange-700 text-white py-2 rounded-md"
@@ -178,7 +298,7 @@ function ForgotPassword() {
           </button>
         </form>
       </div>
-      {/* {loading ? <Loader /> : <div></div>} */}
+      {loading ? <Loader /> : <div></div>}
       {toast.show && (
         <Toast
           message={toast.message}
