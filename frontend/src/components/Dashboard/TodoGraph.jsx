@@ -107,7 +107,6 @@ function TodoGraph() {
         { headers: { "Content-Type": "application/json" } }
       );
 
-      // console.table(response.data.notes)
       setNotes(response.data.notes);
     } catch (error) {
       let errorMessage = "Something went wrong.";
@@ -138,8 +137,6 @@ function TodoGraph() {
 
       // setNotes((prev) => [...prev, ...response.data.notes]);
       setNotes(newNotes);
-      console.log(newNotes);
-      console.log(notes);
 
       showToast("Journal saved!", "success");
     } catch (error) {

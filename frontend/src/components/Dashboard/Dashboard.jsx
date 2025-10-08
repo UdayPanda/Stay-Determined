@@ -8,9 +8,11 @@ import VitaminM from "./VitaminM";
 import Search from "./Search";
 import { ExpanseProvider } from "../../contexts/ExpanseContext";
 import Premium from "./Premium";
+import Plans from "./Plans";
 
 function Dashboard() {
   const [isOpen, setIsOpen] = useState(false);
+  const [active, setActive] = useState("dashboard");
   const [stateDisplay, setStateDisplay] = useState("dashboard");
 
   const toggleMenu = () => {
@@ -25,6 +27,8 @@ function Dashboard() {
         return <AllTodos />;
       case "addTodo":
         return <AddTodo />;
+      case "plans":
+        return <Plans />;
       case "vitaminm":
         return (
           <ExpanseProvider>
@@ -53,32 +57,38 @@ function Dashboard() {
           <nav className={`menu ${isOpen ? "open" : ""}`}>
             <ul>
               <li
-                className="cursor-pointer p-2 rounded-md hover:bg-slate-300"
-                onClick={() => setStateDisplay("dashboard")}
+                className={`${active === "dashboard" ? "bg-[#1f2937] text-[#e5e7eb]" : ""} cursor-pointer p-2 rounded-md hover:bg-slate-300 hover:text-[#1f2937]`}
+                onClick={() => {setStateDisplay("dashboard"); setActive("dashboard")}}
               >
                 Dashboard
               </li>
               <li
-                className="cursor-pointer p-2 rounded-md hover:bg-slate-300"
-                onClick={() => setStateDisplay("allTodos")}
+                className={`${active === "alltodos" ? "bg-[#1f2937] text-[#e5e7eb]" : ""} cursor-pointer p-2 rounded-md hover:bg-slate-300 hover:text-[#1f2937]`}
+                onClick={() => {setStateDisplay("allTodos"); setActive("alltodos")}}
               >
                 All Todos
               </li>
               <li
-                className="cursor-pointer p-2 rounded-md hover:bg-slate-300"
-                onClick={() => setStateDisplay("addTodo")}
+                className={`${active === "addtodo" ? "bg-[#1f2937] text-[#e5e7eb]" : ""} cursor-pointer p-2 rounded-md hover:bg-slate-300 hover:text-[#1f2937]`}
+                onClick={() => {setStateDisplay("addTodo"); setActive("addtodo")}}
               >
                 Add Todo
               </li>
               <li
-                className="cursor-pointer p-2 rounded-md hover:bg-slate-300"
-                onClick={() => setStateDisplay("vitaminm")}
+                className={`${active === "plans" ? "bg-[#1f2937] text-[#e5e7eb]" : ""} cursor-pointer p-2 rounded-md hover:bg-slate-300 hover:text-[#1f2937]`}
+                onClick={() => {setStateDisplay("plans"); setActive("plans")}}
+              >
+                Plans
+              </li>
+              <li
+                className={`${active === "vitaminm" ? "bg-[#1f2937] text-[#e5e7eb]" : ""} cursor-pointer p-2 rounded-md hover:bg-slate-300 hover:text-[#1f2937]`}
+                onClick={() => {setStateDisplay("vitaminm"); setActive("vitaminm")}}
               >
                 VitaminM
               </li>
               <li
-                className="cursor-pointer p-2 rounded-md hover:bg-slate-300"
-                onClick={() => setStateDisplay("premium")}
+                className={`${active === "premium" ? "bg-[#1f2937] text-[#e5e7eb]" : ""} cursor-pointer p-2 rounded-md hover:bg-slate-300 hover:text-[#1f2937]`}
+                onClick={() => {setStateDisplay("premium"); setActive("premium")}}
               >
                 Premium
               </li>

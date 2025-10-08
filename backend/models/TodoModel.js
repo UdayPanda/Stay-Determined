@@ -16,7 +16,7 @@ const todoSchema = new mongoose.Schema({
     },
     date: {
         type: Date,
-        default: Date.now
+        default: Date.now,
     },
     scheduledFor: {
         type: Date,
@@ -33,7 +33,7 @@ const todoSchema = new mongoose.Schema({
     label: {
         type: Number,
         enum: {
-                values: [1,2,3,4],
+                values: [1,2,3,4,5],
                 message: `You entered invalid label. It must be 1, 2, 3 or 4.`
         },
         default: 1,

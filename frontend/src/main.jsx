@@ -8,7 +8,6 @@ import {
   Route,
   RouterProvider,
 } from 'react-router-dom';
-// import Home from './components/Home/Home.jsx';
 import HomePage from './components/Home/HomePage.jsx';
 import About from './components/About/About.jsx';
 import SignUp from './components/Auth/SignUp.jsx';
@@ -26,14 +25,12 @@ const router = createBrowserRouter(
   createRoutesFromElements(
     <>
       <Route path="/" element={<App />}>
-        {/* <Route path="" element={<Home />} /> */}
         <Route path="" element={<HomePage />} />/
         <Route path="about" element={<About />} />
         <Route path="signup" element={<SignUp />} />
         <Route path="login" element={<Login />} />
         <Route path="forgot-password" element={<ForgotPassword />} />
         <Route path="profile" element={<PrivateRoute element={<Profile />} />} />
-        {/* <Route path="*" element={<Home />} /> */}
         <Route path="*" element={<HomePage />} />
       </Route>
       <Route path="dashboard" element={<PrivateRoute element={<Dashboard />} />} />

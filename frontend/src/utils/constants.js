@@ -23,3 +23,9 @@ export const ADD_EXPANSE = `${EXPANSE_ROUTE}/add`;
 export const GET_EXPANSE = `${EXPANSE_ROUTE}/get`;
 export const GET_BALANCE = `${EXPANSE_ROUTE}/balance`;
 export const DELETE_EXPANSE = `${EXPANSE_ROUTE}/delete`;
+
+export const PLAN_ROUTE = "api/plans";
+export const ADD_PLAN = `${PLAN_ROUTE}/add`;
+export const GET_PLAN = `${PLAN_ROUTE}/get`;
+export const UPDATE_PLAN = `${PLAN_ROUTE}/update`;
+export const DELETE_PLAN = `${PLAN_ROUTE}/delete`;

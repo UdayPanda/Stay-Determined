@@ -118,9 +118,9 @@ function Search() {
                     }text-sm h-6 overflow-hidden text-gray-700`}
                   >
                     <span className="font-bold text-blue-500">
-                      {result.category}
+                      {result.category === null ? "Expanse" : result.category}
                     </span>
-                    : {result.title || result.content || JSON.stringify(result)}
+                    : {result.title || result.content || result.description || JSON.stringify(result)}
                   </p>
 
                   {result.date && (

@@ -11,14 +11,14 @@
     "nodemon": "^3.1.4"
   },
   "name": "backend",
-  "version": "1.1.1",
+  "version": "1.1.2",
   "main": "server.js",
   "scripts": {
     "start": "node server.js",
     "dev": "nodemon server.js"
   },
   "type": "module",
-  "author": "",
+  "author": "Uday Panda",
   "license": "ISC",
-  "description": ""
+  "description": "This is a complete version of the Stay Determined application with both frontend and backend components."
 }
