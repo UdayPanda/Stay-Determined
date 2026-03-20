@@ -42,11 +42,6 @@ function SignUp() {
       return false;
     }
 
-    if (name && !/^[a-zA-Z\s]+$/.test(name)) {
-      showToast("Name can only contain letters and spaces", "error");
-      return false;
-    }
-
     if (!phoneNumberPattern.test(phone)) {
       showToast("Invalid phone number", "error");
       return false;
@@ -194,7 +189,7 @@ function SignUp() {
               </label>
               <input
                 className="bg-gray-200 p-1 px-2 rounded-md outline-none"
-                type="text"
+                type="password"
                 id="confirmpassword"
                 value={confirmPassword}
                 onChange={(e) => setConfirmPassword(e.target.value)}

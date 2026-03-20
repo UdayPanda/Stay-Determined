@@ -1,4 +1,5 @@
-import { TodoProvider, useAuth } from "../../contexts";
+
+import { useAuth } from "../../contexts";
 import { useEffect, useState } from "react";
 import TodoItem from "../Todo/TodoItem";
 import { apiClient } from "../../lib/apiClient";
@@ -8,13 +9,23 @@ import Loader from "../Templates/Loader";
 import Prompt from "../Templates/Prompt";
 
 function AllTodos({ label }) {
+  const { user } = useAuth();
+
   const [todos, setTodos] = useState([]);
-  const countCompleted = todos.filter((todo) => todo.completed).length;
+  const [loading, setLoading] = useState(false);
+
   const [date, setDate] = useState(() => {
     const today = new Date();
     return today.toISOString().split("T")[0];
   });
-  const day = new Date(date).getDay();
+
+  const [todoLabel, setTodoLabel] = useState(label || 0);
+
+  const [toast, setToast] = useState({ show: false, message: "", type: "" });
+
+  const [showPrompt, setShowPrompt] = useState(false);
+  const [promptTodoId, setPromptTodoId] = useState(null);
+
   const days = [
     "Sunday",
     "Monday",
@@ -24,52 +35,48 @@ function AllTodos({ label }) {
     "Friday",
     "Saturday",
   ];
-  const [todoLabel, setTodoLabel] = useState(label);
-  const { user } = useAuth();
-  const [toast, setToast] = useState({ show: false, message: "", type: "" });
+
   const labelInfo = {
     1: "Urgent but not Important",
     2: "Important but not Urgent",
     3: "Urgent and Important",
     4: "Other",
   };
-  const [loading, setLoading] = useState(false);
 
-  const [showPrompt, setShowPrompt] = useState(false);
-const [promptTodoId, setPromptTodoId] = useState(null);
+  const countCompleted = todos.filter((todo) => todo.completed).length;
 
-const handlePromptOpen = (todoId) => {
-  setPromptTodoId(todoId);
-  setShowPrompt(true);
-};
-
-const handleConfirm = () => {
-  if (promptTodoId) {
-    removeTodo(promptTodoId);
-  }
-  setShowPrompt(false);
-  setPromptTodoId(null);
-};
-
-const handleCancel = () => {
-  setShowPrompt(false);
-  setPromptTodoId(null);
-};
+  const day = new Date(date + "T00:00:00").getDay();
 
   const showToast = (message, type) => {
     setToast({ show: true, message, type });
-    setTimeout(
-      () => setToast((prevToast) => ({ ...prevToast, show: false })),
-      3000
-    );
+
+    setTimeout(() => {
+      setToast((prev) => ({ ...prev, show: false }));
+    }, 3000);
+  };
+
+  const handlePromptOpen = (todoId) => {
+    setPromptTodoId(todoId);
+    setShowPrompt(true);
+  };
+
+  const handleConfirm = () => {
+    if (promptTodoId) removeTodo(promptTodoId);
+    setShowPrompt(false);
+    setPromptTodoId(null);
+  };
+
+  const handleCancel = () => {
+    setShowPrompt(false);
+    setPromptTodoId(null);
   };
 
   const todosFilterByLabelProvidedInProp = (fetchedTodos) => {
-    if (fetchedTodos && Array.isArray(fetchedTodos)) {
-      fetchedTodos = fetchedTodos.filter(
+    if (Array.isArray(fetchedTodos)) {
+      const filtered = fetchedTodos.filter(
         (todo) => todo.label === Number(todoLabel)
       );
-      setTodos(fetchedTodos);
+      setTodos(filtered);
     }
   };
 
@@ -83,23 +90,26 @@ const handleCancel = () => {
         { headers: { "Content-Type": "application/json" } }
       );
 
-      if (todoLabel && todoLabel > 0) {
-        todosFilterByLabelProvidedInProp(response.data.todos);
-        setLoading(false);
+      const fetchedTodos = response.data.todos;
+
+      if (todoLabel > 0) {
+        todosFilterByLabelProvidedInProp(fetchedTodos);
       } else {
-        setTodos(response.data.todos);
-        setLoading(false);
+        setTodos(fetchedTodos);
       }
     } catch (error) {
       let errorMessage = "Something went wrong.";
+
       if (error.response) {
         errorMessage =
           error.response.data.message ||
           error.response.data.error ||
           errorMessage;
       }
-      setLoading(false);
+
       showToast(errorMessage, "error");
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -110,14 +120,19 @@ const handleCancel = () => {
         { id, todo },
         { headers: { "Content-Type": "application/json" } }
       );
-      setTodos((prev) =>
-        prev.map((prevTodo) =>
-          prevTodo._id === id ? response.data.todo : prevTodo
-        )
-      );
+
+      const updated = response.data?.todo;
+
+      if (updated) {
+        setTodos((prev) =>
+          prev.map((t) => (t._id === id ? updated : t))
+        );
+      }
+
       showToast("Todo saved successfully!", "success");
     } catch (error) {
       let errorMessage = "Something went wrong.";
+
       if (error.response) {
         errorMessage =
           error.response.data.message ||
@@ -130,15 +145,19 @@ const handleCancel = () => {
   };
 
   const removeTodo = async (id) => {
+    setLoading(true);
+
     try {
       await apiClient.delete(`${DELETE_TODO}/${id}`, {
         headers: { "Content-Type": "application/json" },
       });
-      setTodos((prev) => prev.filter((prevTodo) => prevTodo._id !== id));
+
+      setTodos((prev) => prev.filter((t) => t._id !== id));
 
       showToast("Todo deleted successfully!", "success");
     } catch (error) {
       let errorMessage = "Something went wrong.";
+
       if (error.response) {
         errorMessage =
           error.response.data.message ||
@@ -147,26 +166,29 @@ const handleCancel = () => {
       }
 
       showToast(errorMessage, "error");
+    } finally {
+      setLoading(false);
     }
   };
 
   const toggleComplete = async (id) => {
-    const todo = todos.find((todo) => todo._id === id);
-    if (todo) {
-      updateTodo(id, { ...todo, completed: !todo.completed });
-    }
+    const todo = todos.find((t) => t._id === id);
+    if (!todo) return;
+
+    const updatedTodo = { ...todo, completed: !todo.completed };
+
+    setTodos((prev) =>
+      prev.map((t) => (t._id === id ? updatedTodo : t))
+    );
+
+    await updateTodo(id, updatedTodo);
   };
 
   useEffect(() => {
     const userID = user?.user?.id || user?.id;
 
-    if (userID) {
-      fetchTodos(userID, date);
-    }
-
-    if (userID == undefined) {
-      showToast("Please login again!", "error");
-    }
+    if (userID) fetchTodos(userID, date);
+    else showToast("Please login again!", "error");
   }, [user, date, todoLabel]);
 
   useEffect(() => {
@@ -180,6 +202,7 @@ const handleCancel = () => {
         showToast("Please add todos.....", "info");
       }
     }, 1000);
+
     return () => clearTimeout(timer);
   }, [todos]);
 
@@ -198,9 +221,9 @@ const handleCancel = () => {
 
       <select
         className="rounded-md w-[80px] lg:w-[150px] text-sm outline-none px-1 absolute top-40 right-6 lg:right-10"
-        onChange={(e) => setTodoLabel(e.target.value)}
+        onChange={(e) => setTodoLabel(Number(e.target.value))}
       >
-        <option value="0">filter</option>
+        <option value="0">Filter</option>
         <option value="1">Urgent but not Important</option>
         <option value="2">Important but not Urgent</option>
         <option value="3">Urgent and Important</option>
@@ -209,29 +232,31 @@ const handleCancel = () => {
 
       <div className="text-center mb-10">
         <h1 className="text-2xl lg:text-5xl font-bold text-white mb-3 tracking-tight">
-          {" "}
           {label && label > 0 ? labelInfo[label] : "All"} Task Todos
         </h1>
+
         <p className="text-slate-400 text-md lg:text-lg">
           Filter your todos by selecting a label or date.
         </p>
       </div>
 
       <div className="text-gray-400 text-md mt-2 mx-auto w-[80%] lg:w-[60%]">
-        Total Todos {todos.length}/ Completed {countCompleted}
+        Total Todos {todos.length} / Completed {countCompleted}
       </div>
 
-      {loading ? <Loader /> : <div></div>}
+      {loading && <Loader />}
 
-      <TodoProvider value={{ todos, updateTodo, toggleComplete, handlePromptOpen }}>
-        <div className="flex flex-wrap gap-y-3 w-[80%] lg:w-[60%] mx-auto mt-8">
-          {todos.map((todo) => (
-            <div className="w-full" key={todo._id}>
-              <TodoItem todo={todo} />
-            </div>
-          ))}
-        </div>
-      </TodoProvider>
+      <div className="flex flex-col gap-y-3 w-[80%] lg:w-[60%] mx-auto mt-8">
+        {todos.map((todo) => (
+          <TodoItem
+            key={todo._id}
+            todo={todo}
+            updateTodo={updateTodo}
+            toggleComplete={toggleComplete}
+            handlePromptOpen={handlePromptOpen}
+          />
+        ))}
+      </div>
 
       <Prompt
         isOpen={showPrompt}
@@ -252,4 +277,5 @@ const handleCancel = () => {
     </>
   );
 }
+
 export default AllTodos;

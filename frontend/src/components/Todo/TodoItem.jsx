@@ -1,34 +1,54 @@
 import { useState } from "react";
 import { useTodo } from "../../contexts";
 
-function TodoItem({ todo }) {
-  const { updateTodo, handlePromptOpen, toggleComplete } = useTodo();
+function TodoItem({ todo, updateTodo: propUpdate, toggleComplete: propToggle, handlePromptOpen: propPrompt }) {
+
+  const { updateTodo: ctxUpdate, toggleComplete: ctxToggle, handlePromptOpen: ctxPrompt } = useTodo() || {};
+
+  const updateTodo = propUpdate || ctxUpdate;
+  const toggleComplete = propToggle || ctxToggle;
+  const handlePromptOpen = propPrompt || ctxPrompt;
+
   const [isTodoEditable, setIsTodoEditable] = useState(false);
   const [todoMsg, setTodoMsg] = useState(todo.title);
   const [todoLabel, setTodoLabel] = useState(todo.label);
 
-  const labelColor = { 1: "text-[#32A3F5]", 2: "text-[#f52987]", 3: "text-[#32C64A]", 4: "text-[#F5BC20]", };
+  const labelColor = {
+    1: "text-[#32A3F5]",
+    2: "text-[#f52987]",
+    3: "text-[#32C64A]",
+    4: "text-[#F5BC20]",
+  };
 
-  const editTodo = () => {
+  const editTodo = async () => {
     if (todoMsg.trim() === "") return;
-    updateTodo(todo._id, { ...todo, title: todoMsg, label: Number(todoLabel) });
+
+    const payload = { ...todo, title: todoMsg };
+
+    if (typeof updateTodo === "function") {
+      await updateTodo(todo._id, payload);
+    }
+
     setIsTodoEditable(false);
   };
 
-  const toggleCompleted = () => {
-    toggleComplete(todo._id);
+  const toggleCompleted = async () => {
+    if (typeof toggleComplete === "function") {
+      await toggleComplete(todo._id);
+    } else if (typeof updateTodo === "function") {
+      await updateTodo(todo._id, { ...todo, completed: !todo.completed });
+    }
+
     setIsTodoEditable(false);
   };
-
-  const canEdit = !todo.completed;
 
   return (
     <div
-      className={`flex items-center justify-between w-full min-w-[280px] px-4 py-3 rounded-2xl shadow-md transition-all duration-300 cursor-grab
-        ${todo.completed ? "bg-green-300" : "bg-[#e1d7b7] hover:shadow-lg"}
-      `}
+      className={`flex justify-between items-center h-20 border border-black/10 rounded-lg px-3 py-1.5 gap-x-1 lg:gap-x-3 shadow-sm duration-300 text-black ${
+        todo.completed ? "bg-[#c6e9a7]" : "bg-[#e1d7b7]"
+      }`}
+      style={{ width: "100%", minWidth: "260px" }}
     >
-      {/* Checkbox */}
       <input
         type="checkbox"
         className="w-5 h-5 cursor-pointer accent-blue-500"
@@ -37,74 +57,66 @@ function TodoItem({ todo }) {
         aria-label="Mark as completed"
       />
 
-      {/* Todo Content */}
-      <div className="relative flex flex-col w-[70%]">
-        {/* Todo Title */}
+      <div className="flex flex-col gap-4 relative h-[70px] w-[60%]">
         <input
           type="text"
-          className={`w-full bg-transparent text-base lg:text-lg font-medium tracking-tight outline-none rounded-md transition
+          className={`w-full ml-2 text-xs mt-2 lg:text-lg bg-transparent font-medium tracking-tight outline-none rounded-md transition
             ${isTodoEditable ? "border border-gray-300 px-2 py-1" : "border-none"}
-            ${todo.completed ? "line-through text-gray-400" : "text-gray-800"}
-          `}
+            ${todo.completed ? "line-through text-gray-400" : "text-gray-800"}`}
           value={todoMsg}
           onChange={(e) => setTodoMsg(e.target.value)}
           readOnly={!isTodoEditable}
           maxLength={200}
-          aria-label="Todo text"
         />
 
-        {/* Label Dropdown */}
         <select
-          className={`mt-2 w-fit text-xs lg:text-sm font-semibold rounded-md px-2 py-1 border-none focus:ring-2 focus:ring-blue-300 transition
-            ${!isTodoEditable ? "opacity-60 cursor-not-allowed bg-transparent" : "bg-gray-50"}  ${ labelColor[todoLabel] }
-          `}
+          className={`absolute left-1 w-[150px] lg:w-[250px] font-bold top-9 text-[9px] lg:text-sm rounded bg-white border border-gray-300 px-2 py-1 ${!isTodoEditable ? "opacity-60 cursor-not-allowed bg-transparent" : "bg-gray-50"} ${labelColor[todoLabel]}`}
           value={todoLabel}
-          onChange={(e) => setTodoLabel(e.target.value)}
+          onChange={async (e) => {
+            const newLabel = Number(e.target.value);
+            setTodoLabel(newLabel);
+
+            if (typeof updateTodo === "function") {
+              await updateTodo(todo._id, { ...todo, label: newLabel });
+            }
+          }}
           disabled={!isTodoEditable}
-          aria-label="Todo label"
         >
-          <option value="1" className="text-blue-500">
-            Urgent but not Important
-          </option>
-          <option value="2" className="text-pink-500">
-            Important but not Urgent
-          </option>
-          <option value="3" className="text-green-500">
-            Urgent and Important
-          </option>
-          <option value="4" className="text-yellow-500">
-            Other
-          </option>
+          <option value="1">Urgent but not Important</option>
+          <option value="2">Important but not Urgent</option>
+          <option value="3">Urgent and Important</option>
+          <option value="4">Other</option>
         </select>
       </div>
 
-      {/* Action Buttons */}
-      <div className="flex gap-2">
-        <button
-          className={`px-3 py-1 text-xs lg:text-sm font-medium rounded-xl transition
-            ${isTodoEditable ? "bg-blue-500 text-white hover:bg-blue-600" : "bg-gray-100 text-blue-500 hover:bg-gray-200"}
-            ${!canEdit ? "opacity-50 cursor-not-allowed" : ""}
-          `}
-          onClick={() => {
-            if (!canEdit) return;
-            if (isTodoEditable) {
-              editTodo();
-            } else setIsTodoEditable((prev) => !prev);
-          }}
-          disabled={!canEdit}
-          aria-label={isTodoEditable ? "Save todo" : "Edit todo"}
-        >
-          {isTodoEditable ? "Save" : "Edit"}
-        </button>
+      <button
+        className={`inline-flex h-7 mt-2 px-2 text-xs lg:text-sm text-blue-500 rounded-lg border border-black/10 justify-center items-center bg-gray-50 hover:bg-gray-100 shrink-0 ${
+          todo.completed ? "cursor-not-allowed opacity-60" : ""
+        }`}
+        onClick={async () => {
+          if (todo.completed) return;
 
-        <button
-          className="px-3 py-1 text-xs lg:text-sm font-medium text-red-500 bg-gray-100 rounded-xl hover:bg-red-100 transition"
-          onClick={() => handlePromptOpen && handlePromptOpen(todo._id)}
-          aria-label="Delete todo"
-        >
-          Delete
-        </button>
-      </div>
+          if (isTodoEditable) {
+            await editTodo();
+          } else {
+            setIsTodoEditable(true);
+          }
+        }}
+        disabled={todo.completed}
+      >
+        {isTodoEditable ? "Save" : "Edit"}
+      </button>
+
+      <button
+        className="inline-flex h-7 mt-2 px-2 text-red-500 rounded-lg text-xs lg:text-sm border border-black/10 justify-center items-center bg-gray-50 hover:bg-gray-100 shrink-0"
+        onClick={() => {
+          if (typeof handlePromptOpen === "function") {
+            handlePromptOpen(todo._id);
+          }
+        }}
+      >
+        Delete
+      </button>
     </div>
   );
 }

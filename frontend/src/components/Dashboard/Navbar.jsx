@@ -1,16 +1,17 @@
 
-import { Link, NavLink } from 'react-router-dom'
+import { Link, NavLink, useNavigate } from 'react-router-dom'
 import { useAuth } from '../../contexts';
 import logo from '../../assets/Stay-determined-logo.png'
 
 export default function Navbar() {
 
-    const { user } = useAuth()
+    const { user, logout } = useAuth()
+    const navigate = useNavigate()
     const userName = user?.user?.name || user?.name
 
-    const logoutUser = () => {
-        localStorage.removeItem('token');
-        window.location.reload();
+    const logoutUser = async () => {
+        await logout()
+        navigate('/login')
     };
 
     return (

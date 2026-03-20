@@ -8,6 +8,7 @@ import todoRoute from "./routes/TodoRoute.js";
 import expanseRoute from "./routes/ExpanseRoute.js";
 import noteRoute from "./routes/NoteRoute.js";
 import planRoute from "./routes/PlanRoute.js";
+import compression from "compression";
 
 
 dotenv.config()
@@ -18,17 +19,18 @@ const origin = process.env.ORIGIN
 const db = process.env.DB_URL
 
 app.use(cors({
-    origin: 'https://stay-determined-frontend.onrender.com', 
+    origin: origin, 
     methods: ['GET', 'POST', 'PUT', 'DELETE'],
     credentials: true,  
 }));
 
 app.options('*', cors({
-    origin: 'https://stay-determined-frontend.onrender.com', 
+    origin: origin, 
     methods: ['GET', 'POST', 'PUT', 'DELETE'],
     credentials: true,
 }));
 
+app.use(compression())
 app.use(cookieParser());
 app.use(express.json())
 

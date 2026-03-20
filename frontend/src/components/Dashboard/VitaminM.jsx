@@ -14,6 +14,8 @@ import Credit from "../Expanse/Credit";
 import Debit from "../Expanse/Debit";
 import { TodoProvider } from "../../contexts";
 import Loader from "../Templates/Loader";
+import BulkUploadButton from "../Expanse/BulkUploadButton";
+import EditableExcelModal from "../Expanse/EditableExcelModal";
 
 function getMonthRange() {
   const now = new Date();
@@ -32,14 +34,21 @@ function VitaminM() {
     end: monthRange.end,
   });
   const [toast, setToast] = useState({ show: false, message: "", type: "" });
-  const { error, loading } = useExpanse();
+  const { error, loading, balance } = useExpanse();
+  const [uploadedExcel, setUploadedExcel] = useState(null);
+  const [showModal, setShowModal] = useState(false);
 
   const showToast = (message, type) => {
     setToast({ show: true, message, type });
     setTimeout(
       () => setToast((prevToast) => ({ ...prevToast, show: false })),
-      3000
+      3000,
     );
+  };
+
+  const handleExcelData = (data) => {
+    setUploadedExcel(data);
+    setShowModal(true); // open popup
   };
 
   useEffect(() => {
@@ -53,6 +62,7 @@ function VitaminM() {
   }, [loading]);
 
   return (
+    <ExpanseProvider>
     <div className="relative">
       <div className="absolute lg:top-[-60px] top-[-85px] lg:right-6 right-4 flex items-center gap-4 justify-end">
         <label className="text-white text-xs">From:</label>
@@ -77,7 +87,7 @@ function VitaminM() {
         />
       </div>
 
-      <div className="text-center mb-4">
+      <div className="text-center mb-6">
         <h1 className="text-2xl lg:text-5xl font-bold text-white mb-3 tracking-tight">
           VitaminM Expense Manager
         </h1>
@@ -86,10 +96,14 @@ function VitaminM() {
         </p>
       </div>
 
+      <div className="absolute lg:top-16 top-24 lg:right-[160px] right-20">
+        <BulkUploadButton onExcelExtract={handleExcelData} />
+      </div>
+
       <div className="min-h-screen text-white">
         {/* Main Content */}
         <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-          <ExpanseProvider>
+          {/* <ExpanseProvider> */}
             <TodoProvider>
               {/* Cards Grid */}
               <div className="grid grid-cols-1 lg:grid-cols-4 gap-6 mb-8">
@@ -168,7 +182,7 @@ function VitaminM() {
 
               <ExpanseForm onError={showToast} dateRange={dateRange} />
             </TodoProvider>
-          </ExpanseProvider>
+          {/* </ExpanseProvider> */}
         </main>
 
         <style>{`
@@ -189,6 +203,13 @@ function VitaminM() {
       `}</style>
       </div>
 
+      {showModal && (
+        <EditableExcelModal
+          excelData={uploadedExcel}
+          onClose={() => setShowModal(false)}
+        />
+      )}
+
       {toast.show && (
         <Toast
           message={toast.message}
@@ -198,6 +219,7 @@ function VitaminM() {
         />
       )}
     </div>
+    </ExpanseProvider>
   );
 }
 

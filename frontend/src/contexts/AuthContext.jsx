@@ -1,53 +1,66 @@
 import { useContext, createContext, useState, useEffect } from "react";
 import { apiClient } from "../lib/apiClient";
+import { LOGIN_ME_ROUTE, LOGIN_ROUTE, LOGOUT_ROUTE } from "../utils/constants";
 
 const AuthContext = createContext();
 
 export const AuthProvider = ({ children }) => {
-    const [user, setUser] = useState(null);
-    const [loading, setLoading] = useState(true);
+  const [user, setUser] = useState(null);
+  const [loading, setLoading] = useState(true);
 
-    useEffect(() => {
-        const fetchUser = async () => {
-            setLoading(true); 
-            const token = localStorage.getItem("token");
-        if (token) {
-                try {
-                    const response = await apiClient.post(
-                        "api/auth/decode",
-                        { token },
-                        { headers: { "Content-Type": "application/json" } }
-                    );
-                    setUser(response.data.user || null);
-                } catch (error) {
-                    console.error("Failed to decode token:", error);
-                    setUser(null);
-                }
-            } else {
-                setUser(null);
-            }
+  const fetchUser = async () => {
+    try {
+      const res = await apiClient.get(LOGIN_ME_ROUTE, {
+        withCredentials: true,
+      });
 
-            setLoading(false); 
-        };
+      setUser(res.data.user);
+    } catch (err) {
+      setUser(null);
+    } finally {
+      setLoading(false);
+    }
+  };
 
-        fetchUser();
-    }, []);
+  useEffect(() => {
+    fetchUser();
+  }, []);
 
-    const login = (userData, token) => {
-        localStorage.setItem("token", token);
-        setUser(userData);
-    };
+  const setSession = (nextUser, token) => {
+    if (token) localStorage.setItem("token", token);
+    setUser(nextUser || null);
+  };
 
-    const logout = () => {
-        localStorage.removeItem("token");
-        setUser(null);
-    };
+  const login = async (credentials) => {
+    const res = await apiClient.post(LOGIN_ROUTE, credentials, {
+      withCredentials: true,
+    });
+    setSession(res.data.user, res.data.token);
+    return res;
+  };
 
-    return (
-        <AuthContext.Provider value={{ user, login, logout, loading }}>
-            {children}
-        </AuthContext.Provider>
-    );
+  const logout = async () => {
+    try {
+      await apiClient.post(
+        LOGOUT_ROUTE,
+        {},
+        {
+          withCredentials: true,
+        },
+      );
+    } catch (err) {
+      console.error(err);
+    }
+
+    localStorage.removeItem("token");
+    setUser(null);
+  };
+
+  return (
+    <AuthContext.Provider value={{ user, login, logout, loading, setSession }}>
+      {children}
+    </AuthContext.Provider>
+  );
 };
 
 export const useAuth = () => useContext(AuthContext);

@@ -50,6 +50,14 @@ const expanseSchema = new mongoose.Schema({
     }
 })
 
+// Query patterns:
+// - last transaction for a user by date
+// - list transactions by user + date range (sorted by date desc)
+// - dedupe check by user + date + party + amount
+expanseSchema.index({ user: 1, date: -1 });
+expanseSchema.index({ user: 1, date: 1 });
+expanseSchema.index({ user: 1, date: 1, party: 1, amount: 1 });
+
 const Expanse = mongoose.model("Expanses", expanseSchema)
 
 export default Expanse

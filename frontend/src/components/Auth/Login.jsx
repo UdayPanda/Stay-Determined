@@ -1,11 +1,11 @@
 import { useState } from "react";
-import { apiClient } from "../../lib/apiClient";
-import { LOGIN_ROUTE, LOGIN_ROUTE_GOOGLE } from "../../utils/constants";
+import { LOGIN_ROUTE_GOOGLE } from "../../utils/constants";
 import Toast from "../Templates/Toast.jsx";
 import { Link, useNavigate } from "react-router-dom";
 import { useAuth } from "../../contexts/AuthContext.jsx";
 import Loader from "../Templates/Loader.jsx";
 import { GoogleLogin } from "@react-oauth/google";
+import { apiClient } from "../../lib/apiClient";
 
 function Login() {
   const [phone, setPhone] = useState("");
@@ -14,7 +14,7 @@ function Login() {
   const [showPassword, setShowPassword] = useState(false);
   const [toast, setToast] = useState({ show: false, message: "", type: "" });
   const navigate = useNavigate();
-  const { login } = useAuth();
+  const { login, setSession } = useAuth();
   const [loading, setLoading] = useState(false);
 
   const showToast = (message, type) => {
@@ -52,25 +52,7 @@ function Login() {
     setLoading(true);
     if (validLogin()) {
       try {
-        const response = await apiClient.post(
-          LOGIN_ROUTE,
-          {
-            phone,
-            email,
-            password,
-          },
-          {
-            headers: { "Content-Type": "application/json" },
-            withCredentials: true,
-          }
-        );
-
-        const token = response.data.token;
-        if (token) {
-          localStorage.setItem("token", token);
-        }
-
-        login(response.data.user, response.data.token);
+        await login({ phone, email, password });
         showToast("Logged in successfully", "success");
 
         navigate("/dashboard");
@@ -83,8 +65,9 @@ function Login() {
             errorMessage;
         }
 
-        setLoading(false);
         showToast(errorMessage, "error");
+      } finally {
+        setLoading(false);
       }
     }
   };
@@ -173,8 +156,7 @@ function Login() {
                       token: credentialResponse.credential,
                     });
 
-                    localStorage.setItem("token", response.data.token);
-                    login(response.data.user, response.data.token); // From context
+                    setSession(response.data.user, response.data.token);
                     navigate("/dashboard");
                     showToast("Logged in via Google", "success");
                     setLoading(false);

@@ -1,22 +1,37 @@
-import { jwtDecrypt } from "jose";
+import jwt from "jsonwebtoken";
 
-const authMiddleware = async (req, res, next) => {
+const authMiddleware = (req, res, next) => {
   try {
-    const token = req.cookies.jwt;
-    // console.log("Token from cookies:", req.cookies);
-    
-    if (!token)
-      return res.status(401).json({ success: false, message: "No token" });
+    let token;
 
-    const secret = new TextEncoder().encode(process.env.JWT_KEY);
-    const { payload } = await jwtDecrypt(token, secret);
-    // console.log("middlware activated", payload);    
+    if (req.cookies?.jwt) {
+      token = req.cookies.jwt;
+    }
 
-    req.user = payload;
+    else if (req.headers.authorization?.startsWith("Bearer ")) {
+      token = req.headers.authorization.split(" ")[1];
+    }
+
+    if (!token) {
+      return res.status(401).json({
+        success: false,
+        message: "No token provided",
+      });
+    }
+
+    const decoded = jwt.verify(token, process.env.JWT_KEY);
+
+    req.user = decoded;
+
     next();
 
   } catch (err) {
-    return res.status(403).json({ success: false, message: "Invalid token" });
+    console.error("Auth Error:", err.message);
+
+    return res.status(403).json({
+      success: false,
+      message: "Invalid or expired token",
+    });
   }
 };
 

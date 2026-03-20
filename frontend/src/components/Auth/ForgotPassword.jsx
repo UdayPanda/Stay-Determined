@@ -38,6 +38,7 @@ function ForgotPassword() {
       }
       console.log("email verification");
     } else {
+      setLoading(true);
       phoneNumber = "+91" + phoneNumber;
       if (!window.recaptchaVerifier) {
         window.recaptchaVerifier = new RecaptchaVerifier(
@@ -61,7 +62,6 @@ function ForgotPassword() {
         );
         window.confirmationResult = confirmation;
         setOtpSent(true);
-        setLoading(false);
         showToast("OTP sent successfully", "success");
       } catch (error) {
         showToast(
@@ -71,25 +71,35 @@ function ForgotPassword() {
           "error"
         );
         setInstance(false);
+      } finally {
+        setLoading(false);
       }
     }
   };
 
-  const validator = (otp, password) => {
-    if (!otp || !password) {
-      showToast("Please enter valid OTP and Password.", "error");
+  const validator = (nextOtp, nextPassword) => {
+    if (!otpSent || !window.confirmationResult) {
+      showToast("Please verify your phone number first", "error");
+      return false;
     }
-    if (otp.length != 6 || isNaN(otp) || otp < 100000) {
+
+    if (!nextOtp || !nextPassword) {
+      showToast("Please enter valid OTP and password.", "error");
+      return false;
+    }
+
+    if (nextOtp.length !== 6 || Number.isNaN(Number(nextOtp))) {
       showToast("Please enter a valid 6-digit OTP.", "error");
+      return false;
     }
-    if (password.length < 6) {
+
+    if (nextPassword.length < 6) {
       showToast("Password must be at least 6 characters long", "error");
       return false;
     }
 
     if (
-      password &&
-      !/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)[a-zA-Z\d]{6,}$/.test(password)
+      !/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)[a-zA-Z\d]{6,}$/.test(nextPassword)
     ) {
       showToast(
         "Password must contain at least one uppercase letter, one lowercase letter, and one number",
@@ -98,25 +108,34 @@ function ForgotPassword() {
       return false;
     }
 
-    if (password !== confirmPassword) {
+    if (nextPassword !== confirmPassword) {
       showToast("Passwords do not match", "error");
       return false;
     }
+
+    return true;
   };
 
-  const handleForgotPassword = async (otp, newPassword) => {
-    validator(otp, newPassword);
+  const handleForgotPassword = async (e) => {
+    e.preventDefault();
+    const newPassword = password;
+    const nextOtp = otp;
+
+    if (!validator(nextOtp, newPassword)) return;
     try {
       setLoading(true);
-      const result = await window.confirmationResult.confirm(otp);
+      const result = await window.confirmationResult.confirm(nextOtp);
       const verifiedPhone = result.user.phoneNumber;
 
-      await result.user.delete();
+      const idToken = await result.user.getIdToken();
 
       await apiClient.post(FORGOT_PASSWORD_ROUTE, {
         phone: verifiedPhone,
         password: newPassword,
+        idToken,
       });
+
+      await result.user.delete();
 
       showToast("Password reset successfully", "success");
       setLoading(false);
@@ -281,7 +300,7 @@ function ForgotPassword() {
             </label>
             <input
               className="bg-gray-200 p-1 px-2 rounded-md outline-none"
-              type="text"
+              type="password"
               id="confirmpassword"
               value={confirmPassword}
               onChange={(e) => setConfirmPassword(e.target.value)}
