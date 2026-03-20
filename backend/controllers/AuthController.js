@@ -23,7 +23,8 @@ const cookieOptions = () => {
     // secure: isProd,
     secure: true,
     httpOnly: true,
-    sameSite: isProd ? "None" : "Lax",
+    // sameSite: isProd ? "None" : "Lax",
+    sameSite: "None",
   };
 };
 

@@ -24,12 +24,6 @@ app.use(cors({
     credentials: true,  
 }));
 
-app.options('*', cors({
-    origin: origin, 
-    methods: ['GET', 'POST', 'PUT', 'DELETE'],
-    credentials: true,
-}));
-
 app.use(compression())
 app.use(cookieParser());
 app.use(express.json())
